@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="egg-db-hibernate">
+        <wb-resource deploy-path="/" source-path="/web" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <property name="context-root" value="egg-db-hibernate"/>
+        <property name="java-output-path" value="/egg-db-hibernate/web/WEB-INF/classes"/>
+    </wb-module>
+</project-modules>
