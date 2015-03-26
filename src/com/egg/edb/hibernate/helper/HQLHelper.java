@@ -1,4 +1,4 @@
-package com.egg.edb.hibernate;
+package com.egg.edb.hibernate.helper;
 
 import java.util.Collection;
 import java.util.List;
@@ -10,7 +10,8 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.egg.edb.hibernate.query.PageInfo;
+import com.egg.edb.hibernate.HibernateUtil;
+import com.egg.edb.hibernate.bean.PageInfo;
 
 /**
  * Hibernate使用HQL语句的辅助类

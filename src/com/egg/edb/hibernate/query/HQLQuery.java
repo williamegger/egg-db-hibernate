@@ -3,7 +3,8 @@ package com.egg.edb.hibernate.query;
 import java.util.List;
 import java.util.Map;
 
-import com.egg.edb.hibernate.DBHelper;
+import com.egg.edb.hibernate.bean.PageInfo;
+import com.egg.edb.hibernate.helper.DBHelper;
 
 public class HQLQuery {
 

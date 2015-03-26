@@ -1,4 +1,4 @@
-package com.egg.edb.hibernate;
+package com.egg.edb.hibernate.helper;
 
 import java.io.Serializable;
 import java.util.List;
@@ -8,7 +8,8 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.egg.edb.hibernate.query.Worker;
+import com.egg.edb.hibernate.HibernateUtil;
+import com.egg.edb.hibernate.bean.Worker;
 
 public class DBHelper {
 

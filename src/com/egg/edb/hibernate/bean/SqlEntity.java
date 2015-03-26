@@ -1,4 +1,4 @@
-package com.egg.edb.hibernate.query;
+package com.egg.edb.hibernate.bean;
 
 public class SqlEntity {
 
