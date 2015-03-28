@@ -1,0 +1,117 @@
+package ${daoPackage};
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.egg.edb.hibernate.helper.DBHelper;
+import com.egg.edb.hibernate.query.Query;
+import ${idaoPackage}.I${Entity}Dao;
+import ${entityPackage}.${Entity};
+import ${ePackage}.DaoException;
+
+public class ${Entity}Dao implements I${Entity}Dao {
+
+	private static final Log LOG = LogFactory.getLog(${Entity}Dao.class);
+
+	private static ${Entity}Dao instance = null;
+
+	public static synchronized ${Entity}Dao getInstance() {
+		if (instance == null) {
+			instance = new ${Entity}Dao();
+		}
+		return instance;
+	}
+
+	@Override
+	public ${idType} save(${Entity} ${entity}) throws DaoException {
+		try {
+			if (${entity} == null) {
+				return null;
+			}
+#if(${hasDel})
+			${entity}.setDeleted(false);
+#end
+			${entity}.setCreateDate(System.currentTimeMillis());
+			return (${idType}) DBHelper.save(${entity});
+		} catch (Exception e) {
+			String errorMsg = ${Entity}Dao.class + ".save():" + e.getMessage();
+			LOG.error(errorMsg, e);
+			throw new DaoException(errorMsg, e);
+		}
+	}
+
+	@Override
+	public void update(${Entity} ${entity}) throws DaoException {
+		try {
+			if (${entity} == null) {
+				return;
+			}
+
+			${entity}.setLastDate(System.currentTimeMillis());
+			DBHelper.update(${entity});
+		} catch (Exception e) {
+			String errorMsg = ${Entity}Dao.class + ".update():" + e.getMessage();
+			LOG.error(errorMsg, e);
+			throw new DaoException(errorMsg, e);
+		}
+	}
+
+	@Override
+	public void del(${Entity} ${entity}) throws DaoException {
+		try {
+			if (${entity} == null) {
+				return;
+			}
+
+#if(${hasDel})
+			${entity}.setDeleted(true);
+			${entity}.setLastDate(System.currentTimeMillis());
+			DBHelper.update(${entity});
+#else
+			DBHelper.delete(${entity});
+#end
+		} catch (Exception e) {
+			String errorMsg = ${Entity}Dao.class + ".del():" + e.getMessage();
+			LOG.error(errorMsg, e);
+			throw new DaoException(errorMsg, e);
+		}
+	}
+
+	@Override
+	public ${Entity} get(${idType} ${id}) throws DaoException {
+		try {
+			if (${id} == null || ${id} <= 0) {
+				return null;
+			}
+
+			return Query.table("${Entity} as s1")
+						.select("s1")
+						.eq("s1.deleted", false)
+						.eq("s1.${id}", ${id})
+						.hql().one();
+		} catch (Exception e) {
+			String errorMsg = ${Entity}Dao.class + ".get():" + e.getMessage();
+			LOG.error(errorMsg, e);
+			throw new DaoException(errorMsg, e);
+		}
+	}
+
+	@Override
+	public boolean exist(${idType} ${id}) throws DaoException {
+		try {
+			if (${id} == null || ${id} <= 0) {
+				return false;
+			}
+
+			return Query.table("${Entity} as s1")
+						.eq("s1.deleted", false)
+						.eq("s1.${id}", ${id})
+						.hql().exist();
+		} catch (Exception e) {
+			String errorMsg = ${Entity}Dao.class + ".exist():" + e.getMessage();
+			LOG.error(errorMsg, e);
+			throw new DaoException(errorMsg, e);
+		}
+	}
+
+}

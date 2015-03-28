@@ -1,0 +1,18 @@
+package ${idaoPackage};
+
+import ${entityPackage}.${Entity};
+import ${ePackage}.DaoException;
+
+public interface I${Entity}Dao {
+
+	public ${idType} save(${Entity} ${entity}) throws DaoException;
+
+	public void update(${Entity} ${entity}) throws DaoException;
+
+	public void del(${Entity} ${entity}) throws DaoException;
+
+	public ${Entity} get(${idType} ${id}) throws DaoException;
+
+	public boolean exist(${idType} ${id}) throws DaoException;
+
+}
