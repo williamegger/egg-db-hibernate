@@ -9,7 +9,7 @@ public class Query {
 
 	// operator : =, !=, >, >=, <, <=, like, between, in, not in, is, is not
 	private static final int eq = 0;
-	private static final int nq = 1;
+	private static final int ne = 1;
 	private static final int gt = 2;
 	private static final int ge = 3;
 	private static final int lt = 4;
@@ -186,8 +186,8 @@ public class Query {
 	/**
 	 * 不等:and key != val
 	 */
-	public Query nq(String key, Object val) {
-		addWhere(nq, key, val, null);
+	public Query ne(String key, Object val) {
+		addWhere(ne, key, val, null);
 		return this;
 	}
 
@@ -291,7 +291,7 @@ public class Query {
 		case eq:
 			condition.append("= :").append(paramKey1);
 			break;
-		case nq:
+		case ne:
 			condition.append("!= :").append(paramKey1);
 			break;
 		case gt:
