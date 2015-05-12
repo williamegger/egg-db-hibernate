@@ -154,7 +154,7 @@ public class Query {
 	 * 条件语句：and condition
 	 */
 	public Query where(String condition) {
-		return where(condition, null, null);
+		return where(condition, "", null);
 	}
 
 	/**
@@ -164,13 +164,33 @@ public class Query {
 		if (isBlank(condition)) {
 			return this;
 		}
-
+		
 		if (wheres.length() > 0) {
 			wheres.append(" and ");
 		}
 		wheres.append(condition).append(" ");
 		if (isNotBlank(paramKey) && val != null) {
 			whereParams.put(paramKey, val);
+		}
+		return this;
+	}
+
+	/**
+	 * 条件语句：and condition
+	 */
+	public Query where(String condition, String[] paramKeys, Object[] vals) {
+		if (isBlank(condition)) {
+			return this;
+		}
+
+		if (wheres.length() > 0) {
+			wheres.append(" and ");
+		}
+		wheres.append(condition).append(" ");
+		if (paramKeys != null && paramKeys.length > 0) {
+			for (int i = 0, len = paramKeys.length; i < len; i++) {
+				whereParams.put(paramKeys[i], vals[i]);
+			}
 		}
 		return this;
 	}
