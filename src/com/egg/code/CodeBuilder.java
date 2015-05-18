@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,14 +26,16 @@ public class CodeBuilder {
 
 	public static void main(String[] args) {
 		CodeBuilder builder = new CodeBuilder();
-		
+
 		builder.build(Bean.class);
 	}
-	
+
 	public void build(Class<?>... classes) {
 		if (classes == null || classes.length == 0) {
 			return;
 		}
+
+		buildServiceFactory(classes);
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map = null;
@@ -55,7 +58,7 @@ public class CodeBuilder {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		// 包
-		String rootPackage = "com.newsServer.";
+		String rootPackage = "com.shop.";
 		map.put("entityPackage", rootPackage + "model.entity");
 		map.put("idaoPackage", rootPackage + "model.dao");
 		map.put("daoPackage", rootPackage + "model.dao.impl");
@@ -143,5 +146,19 @@ public class CodeBuilder {
 			sb.append(String.valueOf(c).toLowerCase());
 		}
 		return sb.toString();
+	}
+
+	private void buildServiceFactory(Class<?>... classes) {
+		if (classes == null || classes.length == 0) {
+			return;
+		}
+
+		String tlp = "public static I{0}Service getI{0}Service() {return {0}Service.getInstance();}";
+		System.out.println("---------------------");
+		System.out.println("ServeFactory");
+		System.out.println("---------------------");
+		for (Class<?> cla : classes) {
+			System.out.println(MessageFormat.format(tlp, cla.getSimpleName()));
+		}
 	}
 }
