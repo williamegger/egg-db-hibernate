@@ -2,6 +2,8 @@ package com.egg.edb.hibernate.bean;
 
 import org.hibernate.Session;
 
+import com.egg.edb.hibernate.exception.BLException;
+
 /**
  * 
  * <pre>
@@ -29,6 +31,6 @@ public interface Worker<Params, Result> {
 	 * @return
 	 * @throws Exception
 	 */
-	public Result execute(Session session, Params... params) throws Exception;
+	public Result execute(Session session, Params... params) throws BLException, Exception;
 
 }

@@ -1,7 +1,10 @@
 package com.egg.edb.hibernate.helper;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -10,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.egg.edb.hibernate.HibernateUtil;
 import com.egg.edb.hibernate.bean.Worker;
+import com.egg.edb.hibernate.exception.BLException;
 
 public class DBHelper {
 
@@ -22,10 +26,32 @@ public class DBHelper {
 	public static final HQLHelper hql = HQLHelper.getInstance();
 	public static final SQLHelper sql = SQLHelper.getInstance();
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List<Map> arrayToMap(List<Object[]> list, String... keys) {
+		if (list == null || list.isEmpty()) {
+			return null;
+		}
+		if (keys == null || keys.length == 0) {
+			return null;
+		}
+		List<Map> maps = new ArrayList<Map>();
+		Map map = null;
+		int len = keys.length;
+		for (Object[] objs : list) {
+			map = new HashMap();
+			for (int i = 0; i < len; i++) {
+				map.put(keys[i].trim(), objs[i]);
+			}
+			maps.add(map);
+		}
+		return maps;
+	}
+
 	// --------------------------------
 	// TODO Worker/save/delete/update
 	// --------------------------------
-	public static <Params, Result> Result doWorker(Worker<Params, Result> worker, Params... initParams) throws Exception {
+	public static <Params, Result> Result doWorker(Worker<Params, Result> worker, Params... initParams)
+			throws BLException, Exception {
 		if (worker == null) {
 			return null;
 		}
@@ -44,6 +70,13 @@ public class DBHelper {
 			session.clear();
 			tx.commit();
 			return res;
+		} catch (BLException e) {
+			if (tx != null) {
+				tx.rollback();
+				session.clear();
+			}
+
+			throw e;
 		} catch (Exception e) {
 			if (tx != null) {
 				tx.rollback();
