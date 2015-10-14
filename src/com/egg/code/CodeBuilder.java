@@ -23,11 +23,18 @@ public class CodeBuilder {
 	private static final String BASE = CodeBuilder.class.getClassLoader().getResource("").getPath();
 	private static final String TLP_PATH = BASE + CodeBuilder.class.getPackage().getName().replaceAll("[.]", "/");
 	private static final String UTF8 = "UTF-8";
+	
 
 	public static void main(String[] args) {
-		CodeBuilder builder = new CodeBuilder();
+		CodeBuilder builder = new CodeBuilder("com.egger.");
 
 		builder.build(Bean.class);
+	}
+	
+	private String rootPackage;
+	
+	public CodeBuilder(String rootPackage) {
+		this.rootPackage = rootPackage;
 	}
 
 	public void build(Class<?>... classes) {
@@ -58,7 +65,6 @@ public class CodeBuilder {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		// 包
-		String rootPackage = "com.shop.";
 		map.put("entityPackage", rootPackage + "model.entity");
 		map.put("idaoPackage", rootPackage + "model.dao");
 		map.put("daoPackage", rootPackage + "model.dao.impl");
@@ -153,7 +159,7 @@ public class CodeBuilder {
 			return;
 		}
 
-		String tlp = "public static I{0}Service getI{0}Service() {return {0}Service.getInstance();}";
+		String tlp = "public static I{0}Service getI{0}Service() '{'return {0}Service.getInstance();'}'";
 		System.out.println("---------------------");
 		System.out.println("ServeFactory");
 		System.out.println("---------------------");

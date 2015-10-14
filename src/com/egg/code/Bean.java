@@ -2,7 +2,7 @@ package com.egg.code;
 
 public class Bean {
 
-	private Integer beanId;
+	private String beanId;
 	private String name;
 	private String remark;
 	private Boolean deleted;
@@ -14,11 +14,11 @@ public class Bean {
 	public Bean() {
 	}
 
-	public Integer getBeanId() {
+	public String getBeanId() {
 		return beanId;
 	}
 
-	public void setBeanId(Integer beanId) {
+	public void setBeanId(String beanId) {
 		this.beanId = beanId;
 	}
 

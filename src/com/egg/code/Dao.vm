@@ -80,7 +80,11 @@ public class ${Entity}Dao implements I${Entity}Dao {
 	@Override
 	public ${Entity} get(${idType} ${id}) throws DaoException {
 		try {
+#if(${idType}=="String")
+			if (${id} == null || ${id}.trim().isEmpty()) {
+#else
 			if (${id} == null || ${id} <= 0) {
+#end
 				return null;
 			}
 
@@ -99,7 +103,11 @@ public class ${Entity}Dao implements I${Entity}Dao {
 	@Override
 	public boolean exist(${idType} ${id}) throws DaoException {
 		try {
+#if(${idType}=="String")
+			if (${id} == null || ${id}.trim().isEmpty()) {
+#else
 			if (${id} == null || ${id} <= 0) {
+#end
 				return false;
 			}
 
