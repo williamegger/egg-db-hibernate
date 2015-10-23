@@ -153,14 +153,14 @@ public class Query {
 	/**
 	 * 条件语句：and condition
 	 */
-	public Query where(String condition) {
-		return where(condition, "", null);
+	public Query and(String condition) {
+		return and(condition, "", null);
 	}
 
 	/**
 	 * 条件语句：and condition
 	 */
-	public Query where(String condition, String paramKey, Object val) {
+	public Query and(String condition, String paramKey, Object val) {
 		if (isBlank(condition)) {
 			return this;
 		}
@@ -178,7 +178,7 @@ public class Query {
 	/**
 	 * 条件语句：and condition
 	 */
-	public Query where(String condition, String[] paramKeys, Object[] vals) {
+	public Query and(String condition, String[] paramKeys, Object[] vals) {
 		if (isBlank(condition)) {
 			return this;
 		}
