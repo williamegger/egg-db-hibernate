@@ -90,7 +90,9 @@ public class ${Entity}Dao implements I${Entity}Dao {
 
 			return Query.table("${Entity} as s1")
 						.select("s1")
+#if(${hasDel})
 						.eq("s1.deleted", false)
+#end
 						.eq("s1.${id}", ${id})
 						.hql().one();
 		} catch (Exception e) {
@@ -112,7 +114,9 @@ public class ${Entity}Dao implements I${Entity}Dao {
 			}
 
 			return Query.table("${Entity} as s1")
+#if(${hasDel})
 						.eq("s1.deleted", false)
+#end
 						.eq("s1.${id}", ${id})
 						.hql().exist();
 		} catch (Exception e) {
