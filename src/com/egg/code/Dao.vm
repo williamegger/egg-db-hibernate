@@ -32,7 +32,10 @@ public class ${Entity}Dao implements I${Entity}Dao {
 			${entity}.setDeleted(false);
 #end
 			${entity}.setCreateDate(System.currentTimeMillis());
-			return (${idType}) DBHelper.save(${entity});
+			${idType} ${id} = (${idType}) DaoUtil.save(${entity});
+			${entity}.set${Id}(${id});
+			
+			return ${id};
 		} catch (Exception e) {
 			String errorMsg = ${Entity}Dao.class + ".save():" + e.getMessage();
 			LOG.error(errorMsg, e);
