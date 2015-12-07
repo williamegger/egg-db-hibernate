@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Query {
 
-	// operator : =, !=, >, >=, <, <=, like, between, in, not in, is, is not
+	// operator : =, !=, >, >=, <, <=, like, between, in, not in, is null, is not null
 	private static final int eq = 0;
 	private static final int ne = 1;
 	private static final int gt = 2;
@@ -286,7 +286,7 @@ public class Query {
 	/**
 	 * is not null
 	 */
-	public Query isNot(String key) {
+	public Query isNotNull(String key) {
 		addWhere(is_not_null, key, null, null);
 		return this;
 	}
