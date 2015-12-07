@@ -18,8 +18,8 @@ public class Query {
 	private static final int between = 7;
 	private static final int in = 8;
 	private static final int not_in = 9;
-	private static final int is = 10;
-	private static final int is_not = 11;
+	private static final int is_null = 10;
+	private static final int is_not_null = 11;
 	
 	private static final String left_join = " left join ";
 	private static final String left_join_fetch = " left join fetch ";
@@ -276,18 +276,18 @@ public class Query {
 	}
 
 	/**
-	 * is：and key is val
+	 * is null
 	 */
-	public Query is(String key, Object val) {
-		addWhere(is, key, val, null);
+	public Query isNull(String key) {
+		addWhere(is_null, key, null, null);
 		return this;
 	}
 
 	/**
-	 * is not：and key is not in val
+	 * is not null
 	 */
-	public Query isNot(String key, Object val) {
-		addWhere(is_not, key, val, null);
+	public Query isNot(String key) {
+		addWhere(is_not_null, key, null, null);
 		return this;
 	}
 
@@ -326,11 +326,11 @@ public class Query {
 		case le:
 			condition.append("<= :").append(paramKey1);
 			break;
-		case is:
-			condition.append("is :").append(paramKey1);
+		case is_null:
+			condition.append("is null");
 			break;
-		case is_not:
-			condition.append("is not :").append(paramKey1);
+		case is_not_null:
+			condition.append("is not null");
 			break;
 		case like:
 			condition.append("like :").append(paramKey1);
@@ -350,7 +350,9 @@ public class Query {
 		}
 
 		wheres.append(key).append(" ").append(condition).append(" ");
-		whereParams.put(paramKey1, val1);
+		if (!(operator == is_null || is_null == is_not_null)) {
+			whereParams.put(paramKey1, val1);
+		}
 		if (val2 != null) {
 			whereParams.put(paramKey2, val2);
 		}
