@@ -20,7 +20,7 @@ public class Query {
 	private static final int not_in = 9;
 	private static final int is_null = 10;
 	private static final int is_not_null = 11;
-	
+
 	private static final String left_join = " left join ";
 	private static final String left_join_fetch = " left join fetch ";
 
@@ -40,6 +40,7 @@ public class Query {
 	private Map<String, Object> whereParams = new HashMap<String, Object>();
 	private StringBuffer selects = new StringBuffer();
 	private StringBuffer orders = new StringBuffer();
+	private StringBuffer groups = new StringBuffer();
 
 	public Query(String table) {
 		this.table = table;
@@ -62,12 +63,13 @@ public class Query {
 		}
 		return sql;
 	}
-	
+
 	// ------------
 	// join
 	// ------------
 	/**
 	 * 得到JOIN
+	 * 
 	 * <pre>
 	 * isRemoveFetch：是否移除fetch关键字
 	 * 
@@ -78,7 +80,7 @@ public class Query {
 		if (joins == null || joins.isEmpty()) {
 			return "";
 		}
-		
+
 		StringBuffer sql = new StringBuffer();
 		Set<String> keys = joins.keySet();
 		if (isRemoveFetch) {
@@ -92,7 +94,7 @@ public class Query {
 		}
 		return sql.toString();
 	}
-	
+
 	public Query leftJoin(String table) {
 		return leftJoin(table, null);
 	}
@@ -164,7 +166,7 @@ public class Query {
 		if (isBlank(condition)) {
 			return this;
 		}
-		
+
 		if (wheres.length() > 0) {
 			wheres.append(" and ");
 		}
@@ -535,6 +537,9 @@ public class Query {
 		if (isNotBlank(wheres)) {
 			sql.append(" where ").append(wheres);
 		}
+		if (isNotBlank(groups)) {
+			sql.append(" group by ").append(groups);
+		}
 		if (isNotBlank(orders)) {
 			sql.append(" order by ").append(orders);
 		}
@@ -564,7 +569,7 @@ public class Query {
 		StringBuffer sql = new StringBuffer();
 		sql.append(getSelectColumn());
 		sql.append(getFrom(false));
-		
+
 		return sql.toString();
 	}
 
@@ -655,6 +660,21 @@ public class Query {
 		return this;
 	}
 
+	/**
+	 * group by
+	 */
+	public Query group(String key) {
+		if (isBlank(key)) {
+			return this;
+		}
+
+		if (groups.length() > 0) {
+			groups.append(",");
+		}
+		groups.append(key);
+		return this;
+	}
+
 	private boolean isBlank(CharSequence str) {
 		if (str == null) {
 			return true;
@@ -666,7 +686,7 @@ public class Query {
 		}
 		return true;
 	}
-	
+
 	private boolean isNotBlank(CharSequence str) {
 		return !isBlank(str);
 	}
