@@ -1,7 +1,6 @@
 package com.egg.edb.hibernate.helper;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.egg.edb.hibernate.HibernateUtil;
 import com.egg.edb.hibernate.bean.PageInfo;
-import com.egg.edb.hibernate.bean.SqlEntity;
-import com.egg.edb.hibernate.bean.SqlScalar;
+import com.egg.edb.hibernate.bean.SqlType;
 
 public class SQLHelper {
 
@@ -50,7 +48,7 @@ public class SQLHelper {
 
 	public int update(String tableName, String[] sets, String[] wheres, Map<String, Object> params) throws Exception {
 		if (isBlank(tableName) || isBlank(sets)) {
-			throw error(".update() : String tableName 和 String[] wheres 不能为空");
+			throw error(".update() : String tableName 和 String[] sets 不能为空");
 		}
 
 		String sql = buildSQLForUpdate(tableName, sets, wheres);
@@ -59,7 +57,7 @@ public class SQLHelper {
 
 	public int update(String tableName, String[] sets, String[] wheres, Object[] params) throws Exception {
 		if (isBlank(tableName) || isBlank(sets)) {
-			throw error(".update() : String tableName 和 String[] wheres 不能为空");
+			throw error(".update() : String tableName 和 String[] sets 不能为空");
 		}
 
 		String sql = buildSQLForUpdate(tableName, sets, wheres);
@@ -176,54 +174,37 @@ public class SQLHelper {
 	// ----------------------
 	// TODO one/count/exist
 	// ----------------------
-	public <T> T one(CharSequence sql) throws Exception {
-		return one(sql, null, null, null, null);
+	public <T> T one(CharSequence sql, boolean toMap) throws Exception {
+		return one(sql, null, null, null, toMap);
 	}
 
-	public <T> T one(CharSequence sql, Map<String, Object> params) throws Exception {
-		return one(sql, null, null, params, null);
+	public <T> T one(CharSequence sql, Map<String, Object> params, boolean toMap) throws Exception {
+		return one(sql, null, params, null, toMap);
 	}
 
-	public <T> T one(CharSequence sql, Object[] params) throws Exception {
-		return one(sql, null, null, null, params);
+	public <T> T one(CharSequence sql, Object[] params, boolean toMap) throws Exception {
+		return one(sql, null, null, params, toMap);
 	}
 
-	public <T> T one(CharSequence sql, SqlScalar scalar) throws Exception {
-		return one(sql, scalar, null, null, null);
+	public <T> T one(CharSequence sql, List<SqlType> types, boolean toMap) throws Exception {
+		return one(sql, types, null, null, toMap);
 	}
 
-	public <T> T one(CharSequence sql, SqlScalar scalar, Map<String, Object> params) throws Exception {
-		return one(sql, scalar, null, params, null);
+	public <T> T one(CharSequence sql, List<SqlType> types, Map<String, Object> params, boolean toMap) throws Exception {
+		return one(sql, types, params, null, toMap);
 	}
 
-	public <T> T one(CharSequence sql, SqlScalar scalar, Object[] params) throws Exception {
-		return one(sql, scalar, null, null, params);
-	}
-
-	public <T> T one(CharSequence sql, SqlEntity entity) throws Exception {
-		return one(sql, null, entity, null, null);
-	}
-
-	public <T> T one(CharSequence sql, SqlEntity entity, Map<String, Object> params) throws Exception {
-		return one(sql, null, entity, params, null);
-	}
-
-	public <T> T one(CharSequence sql, SqlEntity entity, Object[] params) throws Exception {
-		return one(sql, null, entity, null, params);
+	public <T> T one(CharSequence sql, List<SqlType> types, Object[] params, boolean toMap) throws Exception {
+		return one(sql, types, null, params, toMap);
 	}
 
 	/**
 	 * 使用SQL语句，得到一条记录
 	 */
-	private <T> T one(CharSequence sql, SqlScalar scalar, SqlEntity entity, Map<String, Object> map, Object[] params)
+	private <T> T one(CharSequence sql, List<SqlType> types, Map<String, Object> map, Object[] params, boolean toMap)
 			throws Exception {
-		List<SqlScalar> scalars = null;
-		if (scalar != null) {
-			scalars = new ArrayList<SqlScalar>();
-			scalars.add(scalar);
-		}
 
-		List<T> list = query(sql, scalars, entity, map, params, 0, 0, false);
+		List<T> list = query(sql, types, map, params, 0, 1, toMap);
 		return (isBlank(list) ? null : list.get(0));
 	}
 
@@ -240,117 +221,75 @@ public class SQLHelper {
 	}
 
 	/**
-	 * 使用SQL语句，得到一条记录
+	 * 使用SQL语句，得到count
 	 */
 	private long count(CharSequence sql, Map<String, Object> map, Object[] params) throws Exception {
-		BigInteger count = one(sql, null, null, map, params);
+		BigInteger count = one(sql, null, map, params, false);
 		return (count == null ? 0 : count.longValue());
 	}
 
 	public boolean exist(CharSequence sql) throws Exception {
-		long count = count(sql);
-		return count > 0;
+		return (count(sql) > 0);
 	}
 
 	public boolean exist(CharSequence sql, Map<String, Object> params) throws Exception {
-		long count = count(sql, params);
-		return count > 0;
+		return (count(sql, params) > 0);
 	}
 
 	public boolean exist(CharSequence sql, Object[] params) throws Exception {
-		long count = count(sql, params);
-		return count > 0;
+		return (count(sql, params) > 0);
 	}
 
 	// ------------
 	// TODO query
 	// ------------
-	public <T> List<T> query(CharSequence sql, List<SqlScalar> scalars, boolean toMap) throws Exception {
-		return query(sql, scalars, null, null, null, 0, 0, toMap);
+	public <T> List<T> query(CharSequence sql, List<SqlType> types, boolean toMap) throws Exception {
+		return query(sql, types, null, null, 0, 0, toMap);
 	}
 
-	public <T> List<T> query(CharSequence sql, List<SqlScalar> scalars, Map<String, Object> params, boolean toMap)
+	public <T> List<T> query(CharSequence sql, List<SqlType> types, Map<String, Object> params, boolean toMap)
 			throws Exception {
-		return query(sql, scalars, null, params, null, 0, 0, toMap);
+		return query(sql, types, params, null, 0, 0, toMap);
 	}
 
-	public <T> List<T> query(CharSequence sql, List<SqlScalar> scalars, Object[] params, boolean toMap)
+	public <T> List<T> query(CharSequence sql, List<SqlType> types, Object[] params, boolean toMap) throws Exception {
+		return query(sql, types, null, params, 0, 0, toMap);
+	}
+
+	public <T> List<T> query(CharSequence sql, List<SqlType> types, int max, boolean toMap) throws Exception {
+		return query(sql, types, null, null, 0, max, toMap);
+	}
+
+	public <T> List<T> query(CharSequence sql, List<SqlType> types, Map<String, Object> params, int max, boolean toMap)
 			throws Exception {
-		return query(sql, scalars, null, null, params, 0, 0, toMap);
+		return query(sql, types, params, null, 0, max, toMap);
 	}
 
-	public <T> List<T> query(CharSequence sql, List<SqlScalar> scalars, int max, boolean toMap) throws Exception {
-		return query(sql, scalars, null, null, null, 0, max, toMap);
+	public <T> List<T> query(CharSequence sql, List<SqlType> types, Object[] params, int max, boolean toMap)
+			throws Exception {
+		return query(sql, types, null, params, 0, max, toMap);
 	}
 
-	public <T> List<T> query(CharSequence sql, List<SqlScalar> scalars, Map<String, Object> params, int max,
+	public <T> List<T> query(CharSequence sql, List<SqlType> types, int start, int max, boolean toMap) throws Exception {
+		return query(sql, types, null, null, start, max, toMap);
+	}
+
+	public <T> List<T> query(CharSequence sql, List<SqlType> types, Map<String, Object> params, int start, int max,
 			boolean toMap) throws Exception {
-		return query(sql, scalars, null, params, null, 0, max, toMap);
+		return query(sql, types, params, null, start, max, toMap);
 	}
 
-	public <T> List<T> query(CharSequence sql, List<SqlScalar> scalars, Object[] params, int max, boolean toMap)
+	public <T> List<T> query(CharSequence sql, List<SqlType> types, Object[] params, int start, int max, boolean toMap)
 			throws Exception {
-		return query(sql, scalars, null, null, params, 0, max, toMap);
-	}
-
-	public <T> List<T> query(CharSequence sql, List<SqlScalar> scalars, int start, int max, boolean toMap)
-			throws Exception {
-		return query(sql, scalars, null, null, null, start, max, toMap);
-	}
-
-	public <T> List<T> query(CharSequence sql, List<SqlScalar> scalars, Map<String, Object> params, int start, int max,
-			boolean toMap) throws Exception {
-		return query(sql, scalars, null, params, null, start, max, toMap);
-	}
-
-	public <T> List<T> query(CharSequence sql, List<SqlScalar> scalars, Object[] params, int start, int max,
-			boolean toMap) throws Exception {
-		return query(sql, scalars, null, null, params, start, max, toMap);
-	}
-
-	public <T> List<T> query(CharSequence sql, SqlEntity entity) throws Exception {
-		return query(sql, null, entity, null, null, 0, 0, false);
-	}
-
-	public <T> List<T> query(CharSequence sql, SqlEntity entity, Map<String, Object> params) throws Exception {
-		return query(sql, null, entity, params, null, 0, 0, false);
-	}
-
-	public <T> List<T> query(CharSequence sql, SqlEntity entity, Object[] params) throws Exception {
-		return query(sql, null, entity, null, params, 0, 0, false);
-	}
-
-	public <T> List<T> query(CharSequence sql, SqlEntity entity, int max) throws Exception {
-		return query(sql, null, entity, null, null, 0, max, false);
-	}
-
-	public <T> List<T> query(CharSequence sql, SqlEntity entity, Map<String, Object> params, int max) throws Exception {
-		return query(sql, null, entity, params, null, 0, max, false);
-	}
-
-	public <T> List<T> query(CharSequence sql, SqlEntity entity, Object[] params, int max) throws Exception {
-		return query(sql, null, entity, null, params, 0, max, false);
-	}
-
-	public <T> List<T> query(CharSequence sql, SqlEntity entity, int start, int max) throws Exception {
-		return query(sql, null, entity, null, null, start, max, false);
-	}
-
-	public <T> List<T> query(CharSequence sql, SqlEntity entity, Map<String, Object> params, int start, int max)
-			throws Exception {
-		return query(sql, null, entity, params, null, start, max, false);
-	}
-
-	public <T> List<T> query(CharSequence sql, SqlEntity entity, Object[] params, int start, int max) throws Exception {
-		return query(sql, null, entity, null, params, start, max, false);
+		return query(sql, types, null, params, start, max, toMap);
 	}
 
 	/**
 	 * 使用SQL，执行查询操作
 	 */
 	@SuppressWarnings("unchecked")
-	private <T> List<T> query(CharSequence sql, List<SqlScalar> scalars, SqlEntity entity, Map<String, Object> map,
-			Object[] params, int start, int max, boolean toMap) throws Exception {
+	private <T> List<T> query(CharSequence sql, List<SqlType> types, Map<String, Object> map, Object[] params,
+			int start, int max, boolean toMap) throws Exception {
 		Object idf = null;
 		Session session = null;
 		Transaction tx = null;
@@ -360,24 +299,22 @@ public class SQLHelper {
 			tx = session.beginTransaction();
 
 			SQLQuery sq = session.createSQLQuery(sql.toString());
-			// List<SqlScalar>
-			if (!isBlank(scalars)) {
-				SqlScalar scalar;
-				for (int i = 0, len = scalars.size(); i < len; i++) {
-					scalar = scalars.get(i);
-					sq.addScalar(scalar.getName(), scalar.getType());
+			// List<SqlType>
+			if (!isBlank(types)) {
+				for (SqlType type : types) {
+					if (type.getScalar() != null) {
+						sq.addScalar(type.getName(), type.getScalar());
+					} else if (type.getEntityClass() != null) {
+						sq.addEntity(type.getName(), type.getEntityClass());
+					}
 				}
-			}
-			// SqlEntity
-			if (entity != null) {
-				sq.addEntity(entity.getName(), entity.getEntityClass());
 			}
 			// Parameters - Map
 			if (!isBlank(map)) {
 				sq.setProperties(map);
 			}
 			// Parameters - Object[]
-			if (params != null) {
+			if (!isBlank(params)) {
 				for (int i = 0, len = params.length; i < len; i++) {
 					sq.setParameter(i, params[i]);
 				}
@@ -415,40 +352,26 @@ public class SQLHelper {
 	// ------------
 	// TODO page
 	// ------------
-	public PageInfo page(CharSequence selectSQL, CharSequence countSQL, List<SqlScalar> scalars, int page, int rows,
+	public PageInfo page(CharSequence selectSQL, CharSequence countSQL, List<SqlType> types, int page, int rows,
 			boolean toMap) throws Exception {
-		return page(selectSQL, countSQL, scalars, null, null, null, page, rows, toMap);
+		return page(selectSQL, countSQL, types, null, null, page, rows, toMap);
 	}
 
-	public PageInfo page(CharSequence selectSQL, CharSequence countSQL, List<SqlScalar> scalars, Map<String, Object> params,
-			int page, int rows, boolean toMap) throws Exception {
-		return page(selectSQL, countSQL, scalars, null, params, null, page, rows, toMap);
+	public PageInfo page(CharSequence selectSQL, CharSequence countSQL, List<SqlType> types,
+			Map<String, Object> params, int page, int rows, boolean toMap) throws Exception {
+		return page(selectSQL, countSQL, types, params, null, page, rows, toMap);
 	}
 
-	public PageInfo page(CharSequence selectSQL, CharSequence countSQL, List<SqlScalar> scalars, Object[] params, int page,
+	public PageInfo page(CharSequence selectSQL, CharSequence countSQL, List<SqlType> types, Object[] params, int page,
 			int rows, boolean toMap) throws Exception {
-		return page(selectSQL, countSQL, scalars, null, null, params, page, rows, toMap);
-	}
-
-	public PageInfo page(CharSequence selectSQL, CharSequence countSQL, SqlEntity entity, int page, int rows) throws Exception {
-		return page(selectSQL, countSQL, null, entity, null, null, page, rows, false);
-	}
-
-	public PageInfo page(CharSequence selectSQL, CharSequence countSQL, SqlEntity entity, Map<String, Object> params,
-			int page, int rows) throws Exception {
-		return page(selectSQL, countSQL, null, entity, params, null, page, rows, false);
-	}
-
-	public PageInfo page(CharSequence selectSQL, CharSequence countSQL, SqlEntity entity, Object[] params, int page, int rows)
-			throws Exception {
-		return page(selectSQL, countSQL, null, entity, null, params, page, rows, false);
+		return page(selectSQL, countSQL, types, null, params, page, rows, toMap);
 	}
 
 	/**
 	 * 使用SQL语句，执行分页操作
 	 */
-	private PageInfo page(CharSequence selectSQL, CharSequence countSQL, List<SqlScalar> scalars, SqlEntity entity,
-			Map<String, Object> map, Object[] params, int page, int rows, boolean toMap) throws Exception {
+	private PageInfo page(CharSequence selectSQL, CharSequence countSQL, List<SqlType> types, Map<String, Object> map,
+			Object[] params, int page, int rows, boolean toMap) throws Exception {
 		if (isBlank(selectSQL) || isBlank(countSQL)) {
 			return null;
 		}
@@ -458,7 +381,7 @@ public class SQLHelper {
 		if (count > 0) {
 			page = Math.max(page, 1);
 			int start = (page - 1) * rows;
-			list = query(selectSQL, scalars, entity, map, params, start, rows, toMap);
+			list = query(selectSQL, types, map, params, start, rows, toMap);
 		}
 		return PageInfo.build(list, count, page, rows);
 	}

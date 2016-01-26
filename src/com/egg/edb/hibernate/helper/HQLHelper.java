@@ -48,7 +48,7 @@ public class HQLHelper {
 
 	public int update(String entityName, String[] sets, String[] wheres, Map<String, Object> params) throws Exception {
 		if (isBlank(entityName) || isBlank(sets)) {
-			throw error(".update() : String entityName 和 String[] wheres 不能为空");
+			throw error(".update() : String entityName 和 String[] sets 不能为空");
 		}
 
 		String hql = buildHQLForUpdate(entityName, sets, wheres);
@@ -57,7 +57,7 @@ public class HQLHelper {
 
 	public int update(String entityName, String[] sets, String[] wheres, Object[] params) throws Exception {
 		if (isBlank(entityName) || isBlank(sets)) {
-			throw error(".update() : String entityName 和 String[] wheres 不能为空");
+			throw error(".update() : String entityName 和 String[] sets 不能为空");
 		}
 
 		String hql = buildHQLForUpdate(entityName, sets, wheres);

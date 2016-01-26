@@ -1,14 +1,19 @@
 package com.egg.edb.hibernate.bean;
 
-public class SqlEntity {
+import org.hibernate.type.Type;
+
+public class SqlType {
 
 	private String name;
+	private Type scalar;
 	private Class<?> entityClass;
 
-	public SqlEntity() {
+	public SqlType(String name, Type scalar) {
+		this.name = name;
+		this.scalar = scalar;
 	}
 
-	public SqlEntity(String name, Class<?> entityClass) {
+	public SqlType(String name, Class<?> entityClass) {
 		this.name = name;
 		this.entityClass = entityClass;
 	}
@@ -17,16 +22,12 @@ public class SqlEntity {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public Type getScalar() {
+		return scalar;
 	}
 
 	public Class<?> getEntityClass() {
 		return entityClass;
-	}
-
-	public void setEntityClass(Class<?> entityClass) {
-		this.entityClass = entityClass;
 	}
 
 }
