@@ -1,11 +1,11 @@
-package com.egg.edb.hibernate.query;
+package com.egg.db.hibernate.query;
 
 import java.util.List;
 import java.util.Map;
 
-import com.egg.edb.hibernate.bean.PageInfo;
-import com.egg.edb.hibernate.bean.SqlType;
-import com.egg.edb.hibernate.helper.DBHelper;
+import com.egg.db.hibernate.bean.PageInfo;
+import com.egg.db.hibernate.bean.SqlType;
+import com.egg.db.hibernate.helper.DBHelper;
 
 public class SQLQuery {
 

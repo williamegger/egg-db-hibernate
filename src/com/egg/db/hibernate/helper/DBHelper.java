@@ -1,4 +1,4 @@
-package com.egg.edb.hibernate.helper;
+package com.egg.db.hibernate.helper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,9 +11,9 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.egg.edb.hibernate.HibernateUtil;
-import com.egg.edb.hibernate.bean.Worker;
-import com.egg.edb.hibernate.exception.BLException;
+import com.egg.db.hibernate.HibernateUtil;
+import com.egg.db.hibernate.bean.Worker;
+import com.egg.db.hibernate.exception.BLException;
 
 public class DBHelper {
 

@@ -1,4 +1,4 @@
-package com.egg.edb.hibernate.exception;
+package com.egg.db.hibernate.exception;
 
 import com.alibaba.fastjson.JSONObject;
 

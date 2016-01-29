@@ -1,4 +1,4 @@
-package com.egg.edb.hibernate.query;
+package com.egg.db.hibernate.query;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;

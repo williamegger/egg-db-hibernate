@@ -1,8 +1,8 @@
-package com.egg.edb.hibernate.bean;
+package com.egg.db.hibernate.bean;
 
 import org.hibernate.Session;
 
-import com.egg.edb.hibernate.exception.BLException;
+import com.egg.db.hibernate.exception.BLException;
 
 /**
  * 

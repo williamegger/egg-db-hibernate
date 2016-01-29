@@ -1,4 +1,4 @@
-package com.egg.edb.hibernate;
+package com.egg.db.hibernate;
 
 import java.io.File;
 

@@ -1,4 +1,4 @@
-package com.egg.edb.hibernate.helper;
+package com.egg.db.hibernate.helper;
 
 import java.math.BigInteger;
 import java.util.Collection;
@@ -12,9 +12,9 @@ import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.egg.edb.hibernate.HibernateUtil;
-import com.egg.edb.hibernate.bean.PageInfo;
-import com.egg.edb.hibernate.bean.SqlType;
+import com.egg.db.hibernate.HibernateUtil;
+import com.egg.db.hibernate.bean.PageInfo;
+import com.egg.db.hibernate.bean.SqlType;
 
 public class SQLHelper {
 
