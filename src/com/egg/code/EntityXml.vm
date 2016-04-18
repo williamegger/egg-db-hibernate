@@ -15,7 +15,7 @@
 #end ##
 		</id>
 #elseif (${field.isRef}) ##
-		<many-to-one name="${field.name}" class="${packageName}.${field.Name}" fetch="select">
+		<many-to-one name="${field.name}" class="${packageName}.${field.type}" fetch="select">
 			<column name="${field.column}" />
 		</many-to-one>
 #else ##
