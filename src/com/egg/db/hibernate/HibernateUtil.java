@@ -2,19 +2,19 @@ package com.egg.db.hibernate;
 
 import java.io.File;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Hibernate工具类
  */
 public class HibernateUtil {
 	private static String current_dir = HibernateUtil.class.getClassLoader().getResource("").getPath() + "hibernate.cfg.xml";
-	private static Log log = LogFactory.getLog(HibernateUtil.class);
+	private static Logger LOG = LoggerFactory.getLogger(HibernateUtil.class);
 
 	private static SessionFactory sessionFactory;
 	private static final ThreadLocal<Session> currentSession = new ThreadLocal<Session>();
@@ -57,13 +57,13 @@ public class HibernateUtil {
 				}
 			}
 			if (sessionFactory == null) {
-				log.error("Failed to buildSessionFactory, sessionFactory is null.");
+				LOG.error("Failed to buildSessionFactory, sessionFactory is null.");
 			}
 			return sessionFactory;
 		} catch (HibernateException e) {
-			log.error("getSessionFactory", e);
+			LOG.error("getSessionFactory", e);
 		} catch (Exception err) {
-			log.error("getSessionFactory", err);
+			LOG.error("getSessionFactory", err);
 		}
 		return null;
 	}
