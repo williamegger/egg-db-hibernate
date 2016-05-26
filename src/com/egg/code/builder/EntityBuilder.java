@@ -1,4 +1,4 @@
-package com.egg.code;
+package com.egg.code.builder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +8,9 @@ import java.util.Map;
 import java.util.Set;
 
 import com.egg.code.commons.Common;
+import com.egg.code.commons.VelocityUtil;
 import com.egg.code.sql.MySQLUtil;
+import com.egg.code.vm.Tlp;
 
 public class EntityBuilder {
 
@@ -29,8 +31,6 @@ public class EntityBuilder {
 		System.out.println("OVER");
 	}
 
-	private static final String BASE = EntityBuilder.class.getClassLoader().getResource("").getPath();
-	private static final String TLP_PATH = BASE + EntityBuilder.class.getPackage().getName().replaceAll("[.]", "/");
 	private static final Map<String, String> wrap_types = new HashMap<String, String>();
 
 	public static void build(String database, String packageName, String fileDir) {
@@ -57,9 +57,9 @@ public class EntityBuilder {
 		contextMap.put("fields", columnsToFields(columns));
 
 		String entityPath = fileDir + "/" + contextMap.get("Entity") + ".java";
-		Common.buildFile(TLP_PATH, "Entity.vm", entityPath, contextMap);
+		VelocityUtil.buildFile(Tlp.PATH, "Entity.vm", entityPath, contextMap);
 		String xmlPath = fileDir + "/" + contextMap.get("Entity") + ".hbm.xml";
-		Common.buildFile(TLP_PATH, "EntityXml.vm", xmlPath, contextMap);
+		VelocityUtil.buildFile(Tlp.PATH, "EntityXml.vm", xmlPath, contextMap);
 	}
 
 	private static void intiTypes() {
