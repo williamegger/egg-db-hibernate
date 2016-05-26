@@ -1,7 +1,7 @@
 package ${serPackage};
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import ${LogPackage}.${Log};
+import ${LogPackage}.${LogFactory};
 
 import ${idaoPackage}.I${Entity}Dao;
 import ${daoPackage}.${Entity}Dao;
@@ -11,7 +11,7 @@ import ${iserPackage}.I${Entity}Service;
 
 public class ${Entity}Service implements I${Entity}Service {
 
-	private static final Log LOG = LogFactory.getLog(${Entity}Service.class);
+	private static final ${Log} LOG = ${LogFactory}.${getLog}(${Entity}Dao.class);
 
 	private static ${Entity}Service instance = null;
 

@@ -23,19 +23,21 @@ public class CodeBuilder {
 	private static final String BASE = CodeBuilder.class.getClassLoader().getResource("").getPath();
 	private static final String TLP_PATH = BASE + CodeBuilder.class.getPackage().getName().replaceAll("[.]", "/");
 	private static final String UTF8 = "UTF-8";
-	
 
 	public static void main(String[] args) {
-		CodeBuilder builder = new CodeBuilder("com.egger.");
-
+		CodeBuilder builder = new CodeBuilder();
 		builder.build(Bean.class);
 	}
-	
-	private String rootPackage;
-	
-	public CodeBuilder(String rootPackage) {
-		this.rootPackage = rootPackage;
-	}
+
+	// ==========================================
+
+	private static final String rootPackage = "com.egg";
+	private static final String DBHelperPackage = "com.egg.db.hibernate.helper";
+	private static final String QueryPackage = "com.egg.db.hibernate.query";
+	private static final String LogPackage = "org.slf4j";
+	private static final String Log = "Logger";
+	private static final String LogFactory = "LoggerFactory";
+	private static final String getLog = "getLogger";
 
 	public void build(Class<?>... classes) {
 		if (classes == null || classes.length == 0) {
@@ -65,12 +67,19 @@ public class CodeBuilder {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		// 包
-		map.put("entityPackage", rootPackage + "model.entity");
-		map.put("idaoPackage", rootPackage + "model.dao");
-		map.put("daoPackage", rootPackage + "model.dao.impl");
-		map.put("iserPackage", rootPackage + "model.service");
-		map.put("serPackage", rootPackage + "model.service.impl");
-		map.put("ePackage", rootPackage + "model.exception");
+		map.put("entityPackage", rootPackage + ".model.entity");
+		map.put("idaoPackage", rootPackage + ".model.dao");
+		map.put("daoPackage", rootPackage + ".model.dao.impl");
+		map.put("iserPackage", rootPackage + ".model.service");
+		map.put("serPackage", rootPackage + ".model.service.impl");
+		map.put("ePackage", rootPackage + ".model.exception");
+		
+		map.put("DBHelperPackage", DBHelperPackage);
+		map.put("QueryPackage", QueryPackage);
+		map.put("LogPackage", LogPackage);
+		map.put("Log", Log);
+		map.put("LogFactory", LogFactory);
+		map.put("getLog", getLog);
 
 		// Entity
 		String entityname = clazz.getSimpleName();
@@ -86,9 +95,17 @@ public class CodeBuilder {
 			}
 		}
 		map.put("hasDel", false);
+		map.put("hasCreateDate", false);
+		map.put("hasLastDate", false);
+		String fieldName;
 		for (Field field : fields) {
-			if ("deleted".equals(field.getName())) {
+			fieldName = field.getName();
+			if ("deleted".equals(fieldName)) {
 				map.put("hasDel", true);
+			} else if ("createDate".equals(fieldName)) {
+				map.put("hasCreateDate", true);
+			} else if ("lastDate".equals(fieldName)) {
+				map.put("hasLastDate", true);
 			}
 		}
 

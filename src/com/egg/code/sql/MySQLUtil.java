@@ -18,7 +18,7 @@ public class MySQLUtil extends SQLUtil {
 	private MySQLUtil() {
 	}
 
-	public List<String> getTables() {
+	public List<String> getTables(String database) {
 		String sql = "select TABLE_NAME from `TABLES` where TABLE_SCHEMA = ? ";
 		List<Map<String, Object>> maps = query(sql, database);
 		if (isBlank(maps)) {
@@ -45,7 +45,7 @@ public class MySQLUtil extends SQLUtil {
 	 * ref
 	 * </pre>
 	 */
-	public List<Map<String, Object>> getColumns(String table) {
+	public List<Map<String, Object>> getColumns(String database, String table) {
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT ");
 		sql.append("	s1.COLUMN_NAME as `name`, ");

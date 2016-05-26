@@ -10,35 +10,44 @@ import java.util.Set;
 import com.egg.code.commons.Common;
 import com.egg.code.sql.MySQLUtil;
 
-public class BuildEntity {
+public class EntityBuilder {
 
 	public static void main(String[] args) {
+		String database = "iteacher";
 		String packageName = "com.bbt.iteacher.server.model.entity";
 		String fileDir = "D:/code";
+//		build(database, packageName, fileDir);
 		build(new String[] {
-			"banner_detail",
-			"banner_log",
-			"banner_stat",
-			"banner",
-			"advertiser",
-			"banner_position"
-		}, packageName, fileDir);
-		
+				"banner_detail",
+				"banner_log",
+				"banner_stat",
+				"banner",
+				"advertiser",
+				"banner_position"
+			}, database, packageName, fileDir);
+
 		System.out.println("OVER");
 	}
 
-	private static final String BASE = BuildEntity.class.getClassLoader().getResource("").getPath();
-	private static final String TLP_PATH = BASE + BuildEntity.class.getPackage().getName().replaceAll("[.]", "/");
+	private static final String BASE = EntityBuilder.class.getClassLoader().getResource("").getPath();
+	private static final String TLP_PATH = BASE + EntityBuilder.class.getPackage().getName().replaceAll("[.]", "/");
 	private static final Map<String, String> wrap_types = new HashMap<String, String>();
 
-	public static void build(String[] tables, String packageName, String fileDir) {
+	public static void build(String database, String packageName, String fileDir) {
+		List<String> tables = MySQLUtil.getInstance().getTables(database);
 		for (String table : tables) {
-			build(table, packageName, fileDir);
+			build(table, database, packageName, fileDir);
 		}
 	}
 
-	public static void build(String table, String packageName, String fileDir) {
-		List<Map<String, Object>> columns = MySQLUtil.getInstance().getColumns(table);
+	public static void build(String[] tables, String database, String packageName, String fileDir) {
+		for (String table : tables) {
+			build(table, database, packageName, fileDir);
+		}
+	}
+
+	public static void build(String table, String database, String packageName, String fileDir) {
+		List<Map<String, Object>> columns = MySQLUtil.getInstance().getColumns(database, table);
 		Map<String, Object> contextMap = new HashMap<String, Object>();
 		contextMap.put("table", table);
 		contextMap.put("packageName", packageName);
