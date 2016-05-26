@@ -34,7 +34,7 @@ public class ${Entity}Dao implements I${Entity}Dao {
 #if(${hasCreateDate})
 			${entity}.setCreateDate(System.currentTimeMillis());
 #end
-			${idType} ${id} = (${idType}) DaoUtil.save(${entity});
+			${idType} ${id} = (${idType}) DBHelper.save(${entity});
 			${entity}.set${Id}(${id});
 			
 			return ${id};
