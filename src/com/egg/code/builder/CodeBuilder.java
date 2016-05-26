@@ -126,6 +126,11 @@ public class CodeBuilder {
 		private String username;
 		private String password;
 		private String nickname;
+		private Integer userType;
+		private Integer status;
+		private Integer point;
+		private Integer videos;
+		private Integer topics;
 		private Boolean deleted;
 		private Integer createMan;
 		private Long createDate;

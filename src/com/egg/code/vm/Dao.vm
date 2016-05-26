@@ -134,4 +134,41 @@ public class ${Entity}Dao implements I${Entity}Dao {
 		}
 	}
 
+	@Override
+	public void updateById(${idType} ${id}, String[] sets, String[] wheres, Object[] params) throws DaoException {
+		try {
+#if(${idType}=="String")
+			if (${id} == null || ${id}.trim().isEmpty()) {
+#else
+			if (${id} == null || ${id} <= 0) {
+#end
+				return;
+			}
+			if (sets == null || sets.length == 0) {
+				return;
+			}
+			
+			
+			
+			
+			
+			
+			if (wheres == null || wheres.length == 0) {
+				wheres = new String[] {};
+			}
+			
+			
+			
+			
+			
+			
+			
+			DBHelper.update("${Entity}", sets, wheres, params);
+		} catch (Exception e) {
+			String errorMsg = ${Entity}Dao.class + ".updateById():" + e.getMessage();
+			LOG.error(errorMsg, e);
+			throw new DaoException(errorMsg, e);
+		}
+	}
+
 }

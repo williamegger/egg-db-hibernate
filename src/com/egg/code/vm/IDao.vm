@@ -15,4 +15,10 @@ public interface I${Entity}Dao {
 
 	public boolean exist(${idType} ${id}) throws DaoException;
 
+	public void updateById(${idType} ${id}, String[] sets, String[] wheres, Object[] params) throws DaoException;
+
+	public void del(String[] wheres, Object[] params) throws DaoException;
+
+	public boolean exist(String[] wheres, Object[] params) throws DaoException;
+
 }
