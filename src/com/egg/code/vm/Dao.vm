@@ -1,5 +1,9 @@
 package ${daoPackage};
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import ${LogPackage}.${Log};
 import ${LogPackage}.${LogFactory};
 
@@ -97,12 +101,12 @@ public class ${Entity}Dao implements I${Entity}Dao {
 			}
 
 			return Query.table("${Entity} as s1")
-						.select("s1")
+					.select("s1")
 #if(${hasDel})
-						.eq("s1.deleted", false)
+					.eq("s1.deleted", false)
 #end
-						.eq("s1.${id}", ${id})
-						.hql().one();
+					.eq("s1.${id}", ${id})
+					.hql().one();
 		} catch (Exception e) {
 			String errorMsg = ${Entity}Dao.class + ".get():" + e.getMessage();
 			LOG.error(errorMsg, e);
@@ -123,10 +127,10 @@ public class ${Entity}Dao implements I${Entity}Dao {
 
 			return Query.table("${Entity} as s1")
 #if(${hasDel})
-						.eq("s1.deleted", false)
+					.eq("s1.deleted", false)
 #end
-						.eq("s1.${id}", ${id})
-						.hql().exist();
+					.eq("s1.${id}", ${id})
+					.hql().exist();
 		} catch (Exception e) {
 			String errorMsg = ${Entity}Dao.class + ".exist():" + e.getMessage();
 			LOG.error(errorMsg, e);
@@ -147,25 +151,66 @@ public class ${Entity}Dao implements I${Entity}Dao {
 			if (sets == null || sets.length == 0) {
 				return;
 			}
-			
-			
-			
-			
-			
-			
-			if (wheres == null || wheres.length == 0) {
+
+			List<String> whereList = null;
+			if (wheres == null) {
 				wheres = new String[] {};
+				whereList = new ArrayList<String>();
+			} else {
+				whereList = new ArrayList<String>(Arrays.asList(wheres));
 			}
-			
-			
-			
-			
-			
-			
-			
-			DBHelper.update("${Entity}", sets, wheres, params);
+			whereList.add("${id} = ?");
+			wheres = whereList.toArray(wheres);
+
+			List<Object> paramList = null;
+			if (params == null) {
+				params = new Object[] {};
+				paramList = new ArrayList<Object>();
+			} else {
+				paramList = new ArrayList<Object>(Arrays.asList(params));
+			}
+			paramList.add(${id});
+			params = paramList.toArray(params);
+
+			DBHelper.hql.update("${Entity}", sets, wheres, params);
 		} catch (Exception e) {
 			String errorMsg = ${Entity}Dao.class + ".updateById():" + e.getMessage();
+			LOG.error(errorMsg, e);
+			throw new DaoException(errorMsg, e);
+		}
+	}
+	
+	@Override
+	public void del(String[] wheres, Object[] params) throws DaoException {
+		try {
+#if(${hasDel})
+			DBHelper.hql.update("${Entity}", new String[] {"deleted = 1"}, wheres, params);
+#else
+			DBHelper.hql.delete("${Entity}", wheres, params);
+#end
+		} catch (Exception e) {
+			String errorMsg = ${Entity}Dao.class + ".del():" + e.getMessage();
+			LOG.error(errorMsg, e);
+			throw new DaoException(errorMsg, e);
+		}
+	}
+
+	@Override
+	public boolean exist(String[] wheres, Object[] params) throws DaoException {
+		try {
+			if (wheres == null || wheres.length == 0) {
+				return false;
+			}
+
+			Query query = Query.table("${Entity}");
+			for (String where : wheres) {
+				query.and(where);
+			}
+			String hql = query.getCount();
+
+			return DBHelper.hql.exist(hql, params);
+		} catch (Exception e) {
+			String errorMsg = ${Entity}Dao.class + ".exist():" + e.getMessage();
 			LOG.error(errorMsg, e);
 			throw new DaoException(errorMsg, e);
 		}
