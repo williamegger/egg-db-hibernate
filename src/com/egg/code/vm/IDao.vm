@@ -1,0 +1,31 @@
+package ${idaoPackage};
+
+import java.util.List;
+
+import ${entityPackage}.${Entity};
+import ${ePackage}.DaoException;
+import ${PageInfoPackage}.PageInfo;
+import ${rootPackage}.view.bean.${Entity}SearchBean;
+
+public interface I${Entity}Dao {
+
+	public ${idType} save(${Entity} ${entity}) throws DaoException;
+
+	public void update(${Entity} ${entity}) throws DaoException;
+
+	public void del(${Entity} ${entity}) throws DaoException;
+
+	public ${Entity} get(${idType} ${id}) throws DaoException;
+
+	public boolean exist(${idType} ${id}) throws DaoException;
+
+	public void updateById(${idType} ${id}, String[] sets, String[] wheres, Object[] params) throws DaoException;
+
+	public void del(String[] wheres, Object[] params) throws DaoException;
+
+	public boolean exist(String[] wheres, Object[] params) throws DaoException;
+
+	public List<${Entity}> findBySearch(int max, ${Entity}SearchBean search) throws DaoException;
+
+	public PageInfo findPageBySearch(int page, int rows, ${Entity}SearchBean search) throws DaoException;
+}
