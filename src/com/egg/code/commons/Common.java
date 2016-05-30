@@ -5,6 +5,18 @@ import java.util.Map;
 
 public class Common {
 
+	public static boolean isRef(Class<?> cla) {
+		return !(cla == Integer.class
+				|| cla == Long.class
+				|| cla == Double.class
+				|| cla == Boolean.class
+				|| cla == String.class
+				|| cla == int.class
+				|| cla == long.class
+				|| cla == double.class
+				|| cla == boolean.class);
+	}
+
 	public static String firstUpper(String str) {
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
