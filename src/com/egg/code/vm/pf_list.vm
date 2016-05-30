@@ -63,7 +63,7 @@
 #elseif(${f.Type}=="Boolean")
 								<td>
 									<h:outputText styleClass="cgreen" value="Y" rendered="#{${entity}.${f.name}}" />
-									<h:outputText styleClass="cred" value="N" rendered="!#{${entity}.${f.name}}" />
+									<h:outputText styleClass="cred" value="N" rendered="#{not ${entity}.${f.name}}" />
 								</td>
 #else
 								<td><h:outputText value="#{${entity}.${f.name}}" /></td>
