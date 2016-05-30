@@ -102,7 +102,7 @@ public class PM${Entity}Ctrl extends BaseCtrl {
 
 #foreach($f in ${fieldList})
 #if(${f.isRef})
-			${f.Type} ${f.name} = getI${f.Name}().get(${f.name}Id);
+			${f.Type} ${f.name} = getI${f.Type}().get(${f.name}Id);
 #end
 #end
 
@@ -184,7 +184,7 @@ public class PM${Entity}Ctrl extends BaseCtrl {
 
 #foreach($f in ${fieldList})
 #if(${f.isRef})
-			${f.Type} ${f.name} = getI${f.Name}().get(${f.name}Id);
+			${f.Type} ${f.name} = getI${f.Type}().get(${f.name}Id);
 #end
 #end
 
@@ -197,7 +197,7 @@ public class PM${Entity}Ctrl extends BaseCtrl {
 #end
 #end
 #if(${hasLastMan})
-			${entity}.setLaztMan(getLoginAdminId());
+			${entity}.setLastMan(getLoginAdminId());
 #end
 			getI${Entity}().update(${entity});
 
@@ -221,7 +221,7 @@ public class PM${Entity}Ctrl extends BaseCtrl {
 			${Entity} ${entity} = getI${Entity}().get(${id});
 			if (${entity} != null) {
 #if(${hasLastMan})
-				${entity}.setLaztMan(getLoginAdminId());
+				${entity}.setLastMan(getLoginAdminId());
 #end
 				getI${Entity}().del(${entity});
 			}
@@ -244,8 +244,8 @@ public class PM${Entity}Ctrl extends BaseCtrl {
 #foreach($f in ${fieldList})
 #if(${f.isRef})
 
-	private I${f.Name}Service getI${f.Name}() {
-		return ServiceFactory.getI${f.Name}Service();
+	private I${f.Type}Service getI${f.Type}() {
+		return ServiceFactory.getI${f.Type}Service();
 	}
 #end
 #end
