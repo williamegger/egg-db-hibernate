@@ -168,9 +168,9 @@ public class Query {
 		}
 
 		if (wheres.length() > 0) {
-			wheres.append(" and (");
+			wheres.append(" and ");
 		}
-		wheres.append(condition).append(") ");
+		wheres.append(" (").append(condition).append(") ");
 		if (isNotBlank(paramKey) && val != null) {
 			whereParams.put(paramKey, val);
 		}
@@ -186,9 +186,9 @@ public class Query {
 		}
 
 		if (wheres.length() > 0) {
-			wheres.append(" and (");
+			wheres.append(" and ");
 		}
-		wheres.append(condition).append(") ");
+		wheres.append(" (").append(condition).append(") ");
 		if (paramKeys != null && paramKeys.length > 0) {
 			for (int i = 0, len = paramKeys.length; i < len; i++) {
 				whereParams.put(paramKeys[i], vals[i]);

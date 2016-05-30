@@ -203,6 +203,9 @@ public class ${Entity}Dao implements I${Entity}Dao {
 			}
 
 			Query query = Query.table("${Entity}");
+#if(${hasDel})
+			query.and("deleted = 0");
+#end
 			for (String where : wheres) {
 				query.and(where);
 			}
