@@ -77,7 +77,7 @@
 		      						</h:panelGroup>
 		      						
 	      							<h:panelGroup>
-		      						<a onclick="del(#{${entity}.${id}})" class="ml10">删除</a>
+		      						<a onclick="del('#{${entity}.${id}}')" class="ml10">删除</a>
 		      						</h:panelGroup>
 	      						</td>
 	      					</tr>
