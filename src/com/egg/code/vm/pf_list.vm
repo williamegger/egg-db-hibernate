@@ -62,22 +62,22 @@
 #if(${f.Type}=="Long" || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createMan" || ${f.name}=="lastMan")
 #elseif(${f.Type}=="Boolean")
 								<td>
-									<h:outputText styleClass="cgreen" value="Y" rendered="#{${entity}.${f.name}}" />
-									<h:outputText styleClass="cred" value="N" rendered="#{not ${entity}.${f.name}}" />
+									<h:outputText styleClass="cgreen" value="Y" rendered="#{v.${f.name}}" />
+									<h:outputText styleClass="cred" value="N" rendered="#{not v.${f.name}}" />
 								</td>
 #else
-								<td><h:outputText value="#{${entity}.${f.name}}" /></td>
+								<td><h:outputText value="#{v.${f.name}}" /></td>
 #end
 #end
 	      						<td>
-	      							<a href="view.jsp?${id}=#{${entity}.${id}}">查看</a>
+	      							<a href="view.jsp?${id}=#{v.${id}}">查看</a>
 	      							
 	      							<h:panelGroup>
-		      						<a href="edit.jsf?${id}=#{${entity}.${id}}" class="ml10">编辑</a>
+		      						<a href="edit.jsf?${id}=#{v.${id}}" class="ml10">编辑</a>
 		      						</h:panelGroup>
 		      						
 	      							<h:panelGroup>
-		      						<a onclick="del('#{${entity}.${id}}')" class="ml10">删除</a>
+		      						<a onclick="del('#{v.${id}}')" class="ml10">删除</a>
 		      						</h:panelGroup>
 	      						</td>
 	      					</tr>
