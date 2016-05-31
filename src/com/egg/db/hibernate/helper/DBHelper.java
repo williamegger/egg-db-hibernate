@@ -26,7 +26,7 @@ public class DBHelper {
 	public static final HQLHelper hql = HQLHelper.getInstance();
 	public static final SQLHelper sql = SQLHelper.getInstance();
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	public static List<Map> arrayToMap(List<Object[]> list, String... keys) {
 		if (list == null || list.isEmpty()) {
 			return null;
@@ -36,15 +36,28 @@ public class DBHelper {
 		}
 		List<Map> maps = new ArrayList<Map>();
 		Map map = null;
-		int len = keys.length;
 		for (Object[] objs : list) {
-			map = new HashMap();
-			for (int i = 0; i < len; i++) {
-				map.put(keys[i].trim(), objs[i]);
+			map = arrayToMap(objs, keys);
+			if (map != null) {
+				maps.add(map);
 			}
-			maps.add(map);
 		}
 		return maps;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static Map arrayToMap(Object[] objs, String... keys) {
+		if (objs == null || objs.length == 0) {
+			return null;
+		}
+		if (keys == null || keys.length == 0) {
+			return null;
+		}
+		Map map = new HashMap();
+		for (int i = 0, len = keys.length; i < len; i++) {
+			map.put(keys[i].trim(), objs[i]);
+		}
+		return map;
 	}
 
 	// --------------------------------

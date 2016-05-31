@@ -70,4 +70,14 @@ public class HQLQuery {
 		return DBHelper.hql.page(selectHQL, countHQL, params, page, rows);
 	}
 
+	public Map map(String... keys) throws Exception {
+		Object[] objs = one();
+		return DBHelper.arrayToMap(objs, keys);
+	}
+
+	public List<Map> queryMaps(int max, String... keys) throws Exception {
+		List<Object[]> list = query(max);
+		return DBHelper.arrayToMap(list, keys);
+	}
+
 }
