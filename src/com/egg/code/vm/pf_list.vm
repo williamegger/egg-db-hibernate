@@ -56,7 +56,7 @@
 	      					</tr>
 	      					</thead>
 	      					
-	   						<ui:repeat var="v" value="#{lp.list}" varStatus="vs">
+	   						<ui:repeat var="v" value="#{pi.list}" varStatus="vs">
 	      					<tr class="#{vs.odd?'tr_odd':'tr_even'}">
 #foreach($f in ${fieldList})
 #if(${f.Type}=="Long" || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createMan" || ${f.name}=="lastMan")
