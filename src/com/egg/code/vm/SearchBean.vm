@@ -25,19 +25,19 @@ public class ${Entity}SearchBean {
 #foreach($f in ${fieldList})
 #if(${f.isRef} || ${f.Type}=="Long" || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createDate" || ${f.name}=="createMan" || ${f.name}=="lastDate" || ${f.name}=="lastMan")
 #elseif(${f.Type}=="Boolean" || ${f.Type}=="Integer")
-	public int getQ${f.Name}() {
+	public int getq${f.Name}() {
 		return q${f.Name};
 	}
 
-	public void setQ${f.Name}(int q${f.Name}) {
+	public void setq${f.Name}(int q${f.Name}) {
 		this.q${f.Name} = q${f.Name};
 	}
 #elseif(${f.Type}=="String")
-	public String getQ${f.Name}() {
+	public String getq${f.Name}() {
 		return q${f.Name};
 	}
 
-	public void setQ${f.Name}(String q${f.Name}) {
+	public void setq${f.Name}(String q${f.Name}) {
 		this.q${f.Name} = q${f.Name};
 	}
 #end

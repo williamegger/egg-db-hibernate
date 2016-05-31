@@ -281,16 +281,16 @@ public class ${Entity}Dao implements I${Entity}Dao {
 #foreach($f in ${fieldList})
 #if(${f.isRef} || ${f.Type}=="Long" || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createDate" || ${f.name}=="createMan" || ${f.name}=="lastDate" || ${f.name}=="lastMan")
 #elseif(${f.Type}=="Boolean")
-			if (search.getQ${f.Name}() != -1) {
-				query.eq("s1.${f.name}", search.getQ${f.Name}() == 1);
+			if (search.getq${f.Name}() != -1) {
+				query.eq("s1.${f.name}", search.getq${f.Name}() == 1);
 			}
 #elseif(${f.Type}=="Integer")
-			if (search.getQ${f.Name}() != -1) {
-				query.eq("s1.${f.name}", search.getQ${f.Name}());
+			if (search.getq${f.Name}() != -1) {
+				query.eq("s1.${f.name}", search.getq${f.Name}());
 			}
 #elseif(${f.Type}=="String")
-			if (StringUtils.isNotBlank(search.getQ${f.Name}())) {
-				query.like("s1.${f.name}", "%" + search.getQ${f.Name}() + "%");
+			if (StringUtils.isNotBlank(search.getq${f.Name}())) {
+				query.like("s1.${f.name}", "%" + search.getq${f.Name}() + "%");
 			}
 #end
 #end

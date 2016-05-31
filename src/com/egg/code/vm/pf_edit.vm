@@ -30,7 +30,7 @@
 							<h:outputText value="#{${entity}.${f.name}Str}" />
 #elseif(${f.isRef})
 							<select name="${f.name}" class="main_input">
-								<option><h:outputText value="#{${f.name}Options}" escape="false" /></option>
+								<h:outputText value="#{${f.name}Options}" escape="false" />
 							</select>
 #elseif(${f.Type}=="Boolean")
 							<label for="${f.name}1"><input type="radio" name="${f.name}" id="${f.name}1" value="1" checked="#{${entity}.${f.name}?'checked':''}" /> Y</label>

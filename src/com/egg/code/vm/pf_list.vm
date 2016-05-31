@@ -70,7 +70,7 @@
 #end
 #end
 	      						<td>
-	      							<a href="view.jsp?${id}=#{v.${id}}">查看</a>
+	      							<a href="view.jsf?${id}=#{v.${id}}">查看</a>
 	      							
 	      							<h:panelGroup>
 		      						<a href="edit.jsf?${id}=#{v.${id}}" class="ml10">编辑</a>
