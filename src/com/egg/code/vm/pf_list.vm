@@ -46,6 +46,7 @@
 						<table class="table_style" width="100%" border="0" cellpadding="0" cellspacing="0">
 	      					<thead>
 	      					<tr>
+								<td>ID</td>
 #foreach($f in ${fieldList})
 #if(${f.Type}=="Long" || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createMan" || ${f.name}=="lastMan")
 #else
@@ -58,6 +59,7 @@
 	      					
 	   						<ui:repeat var="v" value="#{pi.list}" varStatus="vs">
 	      					<tr class="#{vs.odd?'tr_odd':'tr_even'}">
+	      						<td><h:outputText value="#{v.${id}}" /></td>
 #foreach($f in ${fieldList})
 #if(${f.Type}=="Long" || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createMan" || ${f.name}=="lastMan")
 #elseif(${f.Type}=="Boolean")
