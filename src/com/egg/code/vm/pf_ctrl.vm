@@ -1,0 +1,273 @@
+package ${rootPackage}.view.ctrl.admin;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+
+import ${LogPackage}.${Log};
+import ${LogPackage}.${LogFactory};
+
+import ${entityPackage}.${Entity};
+#foreach($f in ${fieldList})
+#if(${f.isRef})
+import ${entityPackage}.${f.Type};
+#end
+#end
+import ${rootPackage}.model.service.I${Entity}Service;
+#foreach($f in ${fieldList})
+#if(${f.isRef})
+import ${rootPackage}.model.service.I${f.Type}Service;
+#end
+#end
+import ${rootPackage}.model.service.ServiceFactory;
+import ${rootPackage}.view.base.BaseCtrl;
+import ${PageInfoPackage}.PageInfo;
+import ${rootPackage}.view.bean.${Entity}SearchBean;
+
+/**
+ * 后台管理 - ${Entity}
+ */
+@ManagedBean
+@RequestScoped
+public class PM${Entity}Ctrl extends BaseCtrl {
+
+	public PM${Entity}Ctrl() {
+	}
+
+	/**
+	 * 初始化 - 搜索
+	 */
+	public String getInitSearch() {
+		try {
+		} catch (Exception e) {
+			logE(".getLazy()", e);
+		}
+		return "";
+	}
+
+	/**
+	 * 得到列表（分页）
+	 */
+	public String getLazy() {
+		try {
+			int page = faces.param("page", 1);
+			int rows = faces.param("rows", PageInfo.DEFAULT_ROWS);
+			${Entity}SearchBean search = toBean(${Entity}SearchBean.class);
+			PageInfo pi = getI${Entity}().findPageBySearch(page, rows, search);
+			faces.attr("pi", pi);
+		} catch (Exception e) {
+			logE(".getLazy()", e);
+		}
+		return "";
+	}
+
+	/**
+	 * 初始化 - 查看
+	 */
+	public String getInitView() {
+		try {
+#if(${idType}=="String")
+			String ${id} = faces.param("${id}");
+#else
+			int ${id} = faces.param("${id}", 0);
+#end
+			${Entity} ${entity} = getI${Entity}().get(${id});
+			faces.attr("${entity}", ${entity});
+		} catch (Exception e) {
+			logE(".getInitView()", e);
+		}
+		return "";
+	}
+
+	/**
+	 * 初始化 - 添加
+	 */
+	public String getInitAdd() {
+		try {
+		} catch (Exception e) {
+			logE(".getInitAdd()", e);
+		}
+		return "";
+	}
+
+	/**
+	 * 添加
+	 */
+	public String add() {
+		try {
+#foreach($f in ${fieldList})
+#if(${f.name}=="deleted" || ${f.name}=="createDate" || ${f.name}=="createMan" || ${f.name}=="lastDate" || ${f.name}=="lastMan")
+#elseif(${f.isRef})
+			int ${f.name}Id = faces.param("${f.name}Id", 0);
+#elseif(${f.Type}=="Boolean")
+			boolean ${f.name} = faces.param("${f.name}", 0) == 1;
+#elseif(${f.Type}=="Integer")
+			int ${f.name} = faces.param("${f.name}", 0);
+#elseif(${f.Type}=="Long")
+			long ${f.name} = faces.param("${f.name}", 0l);
+#elseif(${f.Type}=="Double")
+			double ${f.name} = faces.param("${f.name}", 0D);
+#elseif(${f.Type}=="String")
+			String ${f.name} = substring(faces.param("${f.name}"), 64);
+#end
+#end
+
+#foreach($f in ${fieldList})
+#if(${f.isRef})
+			${f.Type} ${f.name} = getI${f.Type}().get(${f.name}Id);
+#end
+#end
+
+			// TODO verify ...
+
+			${Entity} ${entity} = new ${Entity}();
+#foreach($f in ${fieldList})
+#if(${f.name}=="deleted" || ${f.name}=="createDate" || ${f.name}=="createMan" || ${f.name}=="lastDate" || ${f.name}=="lastMan")
+#else
+			${entity}.set${f.Name}(${f.name});
+#end
+#end
+#if(${hasCreateMan})
+			${entity}.setCreateMan(getLoginAdminId());
+#end
+#if(${idType}=="String")
+			String ${id} = getI${Entity}().save(${entity});
+#else
+			Integer ${id} = getI${Entity}().save(${entity});
+#end
+
+			faces.redirect("/admin/${entity}/view.jsf?${id}=" + ${id});
+		} catch (Exception e) {
+			logE(".add()", e);
+		}
+		return "";
+	}
+
+	/**
+	 * 初始化 - 修改
+	 */
+	public String getInitUpdate() {
+		try {
+#if(${idType}=="String")
+			String ${id} = faces.param("${id}");
+#else
+			int ${id} = faces.param("${id}", 0);
+#end
+			${Entity} ${entity} = getI${Entity}().get(${id});
+			faces.attr("${entity}", ${entity});
+		} catch (Exception e) {
+			logE(".getInitUpdate()", e);
+		}
+		return "";
+	}
+
+	/**
+	 * 修改
+	 */
+	public String update() {
+		try {
+#if(${idType}=="String")
+			String ${id} = faces.param("${id}");
+#else
+			int ${id} = faces.param("${id}", 0);
+#end
+#foreach($f in ${fieldList})
+#if(${f.name}=="deleted" || ${f.name}=="createDate" || ${f.name}=="createMan" || ${f.name}=="lastDate" || ${f.name}=="lastMan")
+#elseif(${f.isRef})
+			int ${f.name}Id = faces.param("${f.name}Id", 0);
+#elseif(${f.Type}=="Boolean")
+			boolean ${f.name} = faces.param("${f.name}", 0) == 1;
+#elseif(${f.Type}=="Integer")
+			int ${f.name} = faces.param("${f.name}", 0);
+#elseif(${f.Type}=="Long")
+			long ${f.name} = faces.param("${f.name}", 0l);
+#elseif(${f.Type}=="Double")
+			double ${f.name} = faces.param("${f.name}", 0D);
+#elseif(${f.Type}=="String")
+			String ${f.name} = substring(faces.param("${f.name}"), 64);
+#end
+#end
+
+			${Entity} ${entity} = getI${Entity}().get(${id});
+			if (${entity} == null) {
+				faces.error("记录不存在");
+				return null;
+			}
+
+#foreach($f in ${fieldList})
+#if(${f.isRef})
+			${f.Type} ${f.name} = getI${f.Type}().get(${f.name}Id);
+#end
+#end
+
+			// TODO verify ...
+
+#foreach($f in ${fieldList})
+#if(${f.name}=="deleted" || ${f.name}=="createDate" || ${f.name}=="createMan" || ${f.name}=="lastDate" || ${f.name}=="lastMan")
+#else
+			${entity}.set${f.Name}(${f.name});
+#end
+#end
+#if(${hasLastMan})
+			${entity}.setLastMan(getLoginAdminId());
+#end
+			getI${Entity}().update(${entity});
+
+			faces.redirect("/admin/${entity}/view.jsf?${id}=" + ${id});
+		} catch (Exception e) {
+			logE(".update()", e);
+		}
+		return "";
+	}
+
+	/**
+	 * 删除
+	 */
+	public String del() {
+		try {
+#if(${idType}=="String")
+			String ${id} = faces.param("${id}");
+#else
+			int ${id} = faces.param("${id}", 0);
+#end
+			${Entity} ${entity} = getI${Entity}().get(${id});
+			if (${entity} != null) {
+#if(${hasLastMan})
+				${entity}.setLastMan(getLoginAdminId());
+#end
+				getI${Entity}().del(${entity});
+			}
+		} catch (Exception e) {
+			logE(".del()", e);
+		}
+		return "";
+	}
+
+	// ============
+	// Private
+	// ============
+
+	// ============
+	// Service
+	// ============
+	private I${Entity}Service getI${Entity}() {
+		return ServiceFactory.getI${Entity}Service();
+	}
+#foreach($f in ${fieldList})
+#if(${f.isRef})
+
+	private I${f.Type}Service getI${f.Type}() {
+		return ServiceFactory.getI${f.Type}Service();
+	}
+#end
+#end
+
+	// ============
+	// Log
+	// ============
+	private static final Logger LOG = LoggerFactory.getLogger(PM${Entity}Ctrl.class);
+
+	private void logE(String msg, Throwable e) {
+		LOG.error(PM${Entity}Ctrl.class + msg + ":" + e.getMessage(), e);
+	}
+
+}
