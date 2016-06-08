@@ -3,9 +3,6 @@ package ${rootPackage}.view.ctrl.admin;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
-import ${LogPackage}.${Log};
-import ${LogPackage}.${LogFactory};
-
 import ${entityPackage}.${Entity};
 #foreach($f in ${fieldList})
 #if(${f.isRef})
@@ -260,14 +257,5 @@ public class PM${Entity}Ctrl extends BaseCtrl {
 	}
 #end
 #end
-
-	// ============
-	// Log
-	// ============
-	private static final Logger LOG = LoggerFactory.getLogger(PM${Entity}Ctrl.class);
-
-	private void logE(String msg, Throwable e) {
-		LOG.error(PM${Entity}Ctrl.class + msg + ":" + e.getMessage(), e);
-	}
 
 }
