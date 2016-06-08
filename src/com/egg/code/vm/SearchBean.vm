@@ -1,4 +1,4 @@
-package ${rootPackage}.view.bean;
+package ${rootPackage}.view.bean.searchBean;
 
 import java.util.Date;
 
