@@ -5,13 +5,21 @@ import java.util.Map;
 
 import com.egg.db.hibernate.bean.PageInfo;
 import com.egg.db.hibernate.helper.DBHelper;
+import com.egg.db.hibernate.template.Arrayer;
+import com.egg.db.hibernate.template.TemplateUtil;
 
 public class HQLQuery {
 
 	private Query query;
+	private Arrayer arrayer;
 
 	public HQLQuery(Query query) {
 		this.query = query;
+	}
+
+	public HQLQuery setTemplate(Arrayer arrayer) {
+		this.arrayer = arrayer;
+		return this;
 	}
 
 	public int update() throws Exception {
@@ -29,7 +37,8 @@ public class HQLQuery {
 	public <T> T one() throws Exception {
 		String hql = query.getSelect();
 		Map<String, Object> params = query.getSelectParams();
-		return DBHelper.hql.one(hql, params);
+		Object rst = DBHelper.hql.one(hql, params);
+		return doTemplate(rst);
 	}
 
 	public long count() throws Exception {
@@ -47,20 +56,23 @@ public class HQLQuery {
 	public <T> List<T> query() throws Exception {
 		String hql = query.getSelect();
 		Map<String, Object> params = query.getSelectParams();
-		return DBHelper.hql.query(hql, params);
+		Object rst = DBHelper.hql.query(hql, params);
+		return doTemplateList(rst);
 	}
 
 	public <T> List<T> query(int max) throws Exception {
 		String hql = query.getSelect();
 		Map<String, Object> params = query.getSelectParams();
-		return DBHelper.hql.query(hql, params, max);
+		Object rst = DBHelper.hql.query(hql, params, max);
+		return doTemplateList(rst);
 	}
 
 	public <T> List<T> query(int page, int rows) throws Exception {
 		String hql = query.getSelect();
 		Map<String, Object> params = query.getSelectParams();
 		int start = (page - 1) * rows;
-		return DBHelper.hql.query(hql, params, start, rows);
+		Object rst = DBHelper.hql.query(hql, params, start, rows);
+		return doTemplateList(rst);
 	}
 
 	public PageInfo page(int page, int rows) throws Exception {
@@ -80,4 +92,17 @@ public class HQLQuery {
 		return DBHelper.arrayToMap(list, keys);
 	}
 
+	private <T> T doTemplate(Object rst) {
+		if (arrayer != null && rst != null) {
+			return arrayer.build((Object[]) rst);
+		}
+		return (T) rst;
+	}
+
+	private <T> List<T> doTemplateList(Object rst) {
+		if (arrayer != null && rst != null) {
+			return TemplateUtil.build((List<Object[]>) rst, arrayer);
+		}
+		return (List<T>) rst;
+	}
 }
