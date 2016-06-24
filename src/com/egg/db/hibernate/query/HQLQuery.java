@@ -11,13 +11,13 @@ import com.egg.db.hibernate.template.TemplateUtil;
 public class HQLQuery {
 
 	private Query query;
-	private Arrayer arrayer;
+	private Arrayer<?> arrayer;
 
 	public HQLQuery(Query query) {
 		this.query = query;
 	}
 
-	public HQLQuery setTemplate(Arrayer arrayer) {
+	public HQLQuery setTemplate(Arrayer<?> arrayer) {
 		this.arrayer = arrayer;
 		return this;
 	}
@@ -94,7 +94,7 @@ public class HQLQuery {
 
 	private <T> T doTemplate(Object rst) {
 		if (arrayer != null && rst != null) {
-			return arrayer.build((Object[]) rst);
+			return (T) arrayer.build((Object[]) rst);
 		}
 		return (T) rst;
 	}

@@ -2,8 +2,8 @@ package com.egg.db.hibernate.template;
 
 import java.util.Map;
 
-public interface Mapper {
+public interface Mapper<T> {
 
-	public <T> T build(Map map);
+	public T build(Map<String, Object> map);
 
 }

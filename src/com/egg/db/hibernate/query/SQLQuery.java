@@ -13,19 +13,19 @@ import com.egg.db.hibernate.template.TemplateUtil;
 public class SQLQuery {
 
 	private Query query;
-	private Arrayer arrayer;
-	private Mapper mapper;
+	private Arrayer<?> arrayer;
+	private Mapper<?> mapper;
 
 	public SQLQuery(Query query) {
 		this.query = query;
 	}
 
-	public SQLQuery setTemplate(Arrayer arrayer) {
+	public SQLQuery setTemplate(Arrayer<?> arrayer) {
 		this.arrayer = arrayer;
 		return this;
 	}
 
-	public SQLQuery setTemplate(Mapper mapper) {
+	public SQLQuery setTemplate(Mapper<?> mapper) {
 		this.mapper = mapper;
 		return this;
 	}
@@ -106,9 +106,9 @@ public class SQLQuery {
 	private <T> T doTemplate(Object rst, boolean toMap) {
 		if (rst != null) {
 			if (toMap && mapper != null) {
-				return mapper.build((Map) rst);
+				return (T) mapper.build((Map) rst);
 			} else if (!toMap && arrayer != null) {
-				return arrayer.build((Object[]) rst);
+				return (T) arrayer.build((Object[]) rst);
 			}
 		}
 		return (T) rst;

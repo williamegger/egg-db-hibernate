@@ -1,7 +1,7 @@
 package com.egg.db.hibernate.template;
 
-public interface Arrayer {
+public interface Arrayer<T> {
 
-	public <T> T build(Object[] objs);
+	public T build(Object[] objs);
 
 }
