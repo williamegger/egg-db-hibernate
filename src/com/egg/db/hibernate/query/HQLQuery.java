@@ -17,7 +17,7 @@ public class HQLQuery {
 		this.query = query;
 	}
 
-	public HQLQuery setTemplate(Arrayer<?> arrayer) {
+	public HQLQuery template(Arrayer<?> arrayer) {
 		this.arrayer = arrayer;
 		return this;
 	}

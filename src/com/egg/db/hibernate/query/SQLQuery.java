@@ -20,12 +20,12 @@ public class SQLQuery {
 		this.query = query;
 	}
 
-	public SQLQuery setTemplate(Arrayer<?> arrayer) {
+	public SQLQuery template(Arrayer<?> arrayer) {
 		this.arrayer = arrayer;
 		return this;
 	}
 
-	public SQLQuery setTemplate(Mapper<?> mapper) {
+	public SQLQuery template(Mapper<?> mapper) {
 		this.mapper = mapper;
 		return this;
 	}
