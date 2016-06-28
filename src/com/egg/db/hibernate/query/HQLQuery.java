@@ -79,7 +79,11 @@ public class HQLQuery {
 		String selectHQL = query.getSelect();
 		String countHQL = query.getCount();
 		Map<String, Object> params = query.getSelectParams();
-		return DBHelper.hql.page(selectHQL, countHQL, params, page, rows);
+		PageInfo pi = DBHelper.hql.page(selectHQL, countHQL, params, page, rows);
+		if (pi != null) {
+			pi.setList(doTemplateList(pi.getList()));
+		}
+		return pi;
 	}
 
 	public Map map(String... keys) throws Exception {

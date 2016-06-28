@@ -100,7 +100,11 @@ public class SQLQuery {
 		String selectSQL = query.getSelect();
 		String countSQL = query.getCount();
 		Map<String, Object> params = query.getSelectParams();
-		return DBHelper.sql.page(selectSQL, countSQL, types, params, page, rows, toMap);
+		PageInfo pi = DBHelper.sql.page(selectSQL, countSQL, types, params, page, rows, toMap);
+		if (pi != null) {
+			pi.setList(doTemplateList(pi.getList(), toMap));
+		}
+		return pi;
 	}
 
 	private <T> T doTemplate(Object rst, boolean toMap) {
