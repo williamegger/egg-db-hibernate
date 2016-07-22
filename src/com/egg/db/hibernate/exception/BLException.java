@@ -2,7 +2,7 @@ package com.egg.db.hibernate.exception;
 
 import com.alibaba.fastjson.JSONObject;
 
-public class BLException extends Throwable {
+public class BLException extends Exception {
 
 	private int err;
 	private String msg;
@@ -14,7 +14,7 @@ public class BLException extends Throwable {
 		this.err = err;
 		this.msg = msg;
 	}
-	
+
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
 		if (msg == null) {
