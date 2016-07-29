@@ -297,7 +297,7 @@ public class Query {
 	 * 创建where条件语句
 	 */
 	private void addWhere(int operator, String key, Object val1, Object val2) {
-		if (isBlank(key) || val1 == null) {
+		if (isBlank(key) || (val1 == null && !(operator == is_null || is_null == is_not_null))) {
 			return;
 		}
 
