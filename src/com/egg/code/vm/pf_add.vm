@@ -1,0 +1,66 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:utils="http://java.sun.com/jsf/composite/utils"
+	template="/templates/admin.xhtml">
+
+	<ui:define name="init"><h:outputText value="#{pM${Entity}Ctrl.initAdd}" /></ui:define>
+	<ui:define name="content_title">添加${Entity}</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:growl id="errMsg" showDetail="true" sticky="false" life="5000" />
+
+			<div class="main_block">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="main_table">
+#foreach($f in ${fieldList})
+#if($!{velocityCount}==1)
+					<tr>
+						<td class="label" valign="top" width="100">${f.name}：</td>
+						<td class="item" valign="middle">
+#else
+					<tr>
+						<td class="label" valign="top">${f.name}：</td>
+						<td class="item" valign="middle">
+#end
+#if(${f.name}=="deleted" || ${f.name}=="createDate" || ${f.name}=="createMan" || ${f.name}=="lastDate" || ${f.name}=="lastMan")
+#elseif(${f.isRef})
+							<select name="${f.name}Id" class="main_input">
+								<h:outputText value="#{${f.name}Options}" escape="false" />
+							</select>
+#elseif(${f.Type}=="Boolean")
+							<label for="${f.name}1"><input type="radio" name="${f.name}" id="${f.name}1" value="1" checked="checked" /> Y</label>
+							<label for="${f.name}0"><input type="radio" name="${f.name}" id="${f.name}0" value="0" /> N</label>
+#elseif(${f.name}=="intro" || ${f.name}=="remark" || ${f.name}=="content")
+							<textarea name="${f.name}" id="${f.name}" rows="3" cols="50" style="margin-bottom:10px;" class="main_textarea"></textarea>
+#elseif(${f.Type}=="Integer" || ${f.Type}=="Long" || ${f.Type}=="Double")
+							<input type="text" name="${f.name}" maxlength="10" class="main_input" />
+#else
+							<input type="text" name="${f.name}" maxlength="64" class="main_input" />
+#end
+						</td>
+					</tr>
+#end
+					<tr>
+						<td class="label" valign="top"></td>
+						<td class="item" valign="middle">
+							<p:commandLink styleClass="btn btn_blue" value="添加" action="#{pM${Entity}Ctrl.add}" update="errMsg" />
+							<a class="btn btn_grey" href="list.jsf">返回列表</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</h:form>
+	</ui:define>
+	
+	<ui:define name="js">
+	<script type="text/javascript">
+	//<![CDATA[
+	var init_menu_id = "menu_${entity}";
+	//]]>
+	</script>
+	</ui:define>
+</ui:composition>
