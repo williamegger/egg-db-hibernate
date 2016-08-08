@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${Action} API</title>
+<style type="text/css">
+*{
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: #fefefe;
+	font-size: 14px;
+	font-family: 'Consolas', 'Microsoft Yahei';
+}
+
+a:focus {  
+	outline:none;  
+} 
+
+.mulu {
+	position: fixed;
+	top: 72px;
+	left: 680px;
+	width: 360px;
+}
+.mulu h4 {
+	padding: 10px 20px;
+	border: 1px solid #aaa;
+	background-color: #E1E5E6;
+	background: -moz-linear-gradient(top, #FEFEFE, #CCCCCC);
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#FEFEFE), to(#CCCCCC));
+	-moz-border-radius: 5px 5px 0 0;
+	-webkit-border-radius: 5px 5px 0 0;
+	border-radius: 5px 5px 0 0;
+}
+
+.mulu-box {
+	padding: 5px 10px;
+	border: 1px solid #aaa;
+	border-top: none;
+	-moz-border-radius: 0 0 5px 5px;
+	-webkit-border-radius: 0 0 5px 5px;
+	border-radius: 0 0 5px 5px;
+	overflow-y: scroll;
+	height: 600px;
+	font-size: 14px;
+}
+
+.mulu-box a {
+	display: block;
+	color: #00A4FF;
+	text-decoration: none;
+}
+.mulu-box a span {
+	display: inline-block;
+	padding: 2px 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.mulu-box a:hover span {
+	background-color: #D6F0FF;
+}
+
+.docs {
+	margin: 20px 0 0 20px;
+	width: 640px;
+}
+
+.docs h1 {
+	text-align: center;
+	line-height: 37px;
+}
+
+.doc {
+	margin: 15px auto;
+}
+
+.doc h4 {
+	padding: 10px 20px;
+	border: 1px solid #aaa;
+	background-color: #E1E5E6;
+	background: -moz-linear-gradient(top, #FEFEFE, #CCCCCC);
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#FEFEFE), to(#CCCCCC));
+	-moz-border-radius: 5px 5px 0 0;
+	-webkit-border-radius: 5px 5px 0 0;
+	border-radius: 5px 5px 0 0;
+}
+.doc .apiBox {
+	border: 0 solid #aaa;
+	border-width: 0 1px 1px 1px;
+}
+.doc pre {
+	padding: 10px 20px;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+form {
+	padding: 20px;
+	border-top: 1px dashed #ccc;
+}
+form .test {
+	font-size: 16px;
+	font-weight: bold;
+}
+form span {
+	display: inline-block;
+	width: 120px;
+	text-align: right;
+}
+form textarea {
+	width: 500px;
+	font-size: 14px;
+	color: #333;
+}
+form input[type='text'],
+form input[type='file'] {
+	width: 400px;
+	height: 25px;
+	line-height: 25px;
+	margin-bottom: 10px;
+}
+form input[type='submit'] {
+	display: block;
+}
+.ps {
+	font-size: 12px;
+	color: #ff8800;
+	text-shadow: 1px 1px 1px #FFE0CC;
+}
+</style>
+</head>
+<body>
+
+<div class="mulu">
+	<h4>目录</h4>
+	<div class="mulu-box"></div>
+</div>
+
+<div class="docs">
+	<h1>${Action} API</h1>
+#foreach($v in ${methodList})
+
+	<div class="doc" id="${v.method}">
+#if("$!{v.methodCN}"!="")
+		<h4>${v.method}（${v.methodCN}）</h4>
+#else
+		<h4>${v.method}</h4>
+#end
+		<div class="apiBox">
+#if("$!{v.comment}"!="")
+			<pre class="intro">
+$!{v.comment}
+			</pre>
+#end
+#if(${v.isJson})
+			<form action="${v.url}">
+#else
+			<form action="${v.url}" enctype="multipart/form-data">
+#end
+				<div class="test">测试：</div>
+$!{v.paramsInput}
+				<input type="submit" value="submit" />
+			</form>
+		</div>
+	</div>
+#end
+
+</div>
+
+<script>
+var baseUrl = '$!{baseUrl}'; // 'http://192.168.0.163:8080/project'
+
+window.onload = function() {
+	initMulu();
+	initForm();
+};
+
+function initMulu() {
+	var muluBox = document.querySelector('.mulu-box');
+	var docs = document.querySelectorAll('.doc');
+	var doc, id, h4, txt, mulu, span;
+	for (var i = 0, len = docs.length; i < len; i++) {
+		doc = docs[i];
+		id = doc.id;
+		h3 = doc.querySelector('h4');
+		txt = h3.innerText || h3.textContent;
+		
+		mulu = document.createElement('a');
+		mulu.setAttribute('href', '#' + id)
+		
+		span = document.createElement('span');
+		span.appendChild(document.createTextNode(txt));
+		
+		mulu.appendChild(span);
+		muluBox.appendChild(mulu);
+	}
+}
+
+function initForm() {
+	var forms = document.querySelectorAll('form');
+	var action;
+	for(var i = 0, len = forms.length; i < len; i++) {
+		action = forms[i].getAttribute('action');
+		forms[i].setAttribute('action', baseUrl + action);
+		forms[i].setAttribute('target', 'resultPage');
+		forms[i].setAttribute('method', 'POST');
+	}
+}
+</script>
+
+</body>
+</html>
