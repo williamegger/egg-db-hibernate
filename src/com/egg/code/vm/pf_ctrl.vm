@@ -36,7 +36,7 @@ public class PM${Entity}Ctrl extends BaseCtrl {
 	public String getInitSearch() {
 		try {
 		} catch (Exception e) {
-			logE(".getLazy()", e);
+			logE(".getInitSearch()", e);
 		}
 		return "";
 	}
