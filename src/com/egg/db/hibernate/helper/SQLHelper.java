@@ -1,13 +1,22 @@
 package com.egg.db.hibernate.helper;
 
 import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.jdbc.Work;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -348,6 +357,72 @@ public class SQLHelper {
 			}
 		}
 	}
+	
+	/**
+     * 使用JDBC查询SQL语句
+     */
+    public List<Map<String, Object>> queryByJDBC(final CharSequence sql, final Object... params) throws Exception {
+        Object idf = null;
+        Session session = null;
+        try {
+            idf = HibernateUtil.createSession();
+            session = HibernateUtil.getSession();
+
+            final List<Map<String, Object>> resList = new ArrayList<Map<String, Object>>();
+
+            session.doWork(new Work() {
+                @Override
+                public void execute(Connection connection) throws SQLException {
+                    PreparedStatement ps = null;
+                    ResultSet res = null;
+
+                    try {
+                        ps = connection.prepareStatement(sql.toString());
+                        if (params != null) {
+                            for (int i = 0, len = params.length; i < len; i++) {
+                                ps.setObject(i + 1, params[i]);
+                            }
+                        }
+
+                        res = ps.executeQuery();
+
+                        if (res != null) {
+                            ResultSetMetaData md = res.getMetaData();
+                            Map<String, Object> resMap;
+                            String lbl;
+                            while (res.next()) {
+                                resMap = new HashMap<String, Object>();
+
+                                for (int i = 1, len = md.getColumnCount(); i <= len; i++) {
+                                    lbl = md.getColumnLabel(i);
+                                    if (StringUtils.isNotBlank(lbl)) {
+                                        lbl = md.getColumnName(i);
+                                    }
+                                    resMap.put(lbl, res.getObject(i));
+                                }
+
+                                resList.add(resMap);
+                            }
+                        }
+                    } finally {
+                        if (res != null) {
+                            res.close();
+                        }
+                        if (ps != null) {
+                            ps.close();
+                        }
+                    }
+                }
+            });
+            return resList;
+        } catch (Exception e) {
+            throw error(".queryByJDBC()", e);
+        } finally {
+            if (idf != null && session != null) {
+                closeQuickly(idf);
+            }
+        }
+    }
 
 	// ------------
 	// TODO page
