@@ -5,7 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:utils="http://java.sun.com/jsf/composite/utils"
-	template="/templates/admin.xhtml">
+	template="/admin/_template/admin.xhtml">
 
 	<ui:define name="init">
 		<h:outputText value="#{pM${Entity}Ctrl.initSearch}" />
@@ -96,7 +96,7 @@
 				
 				<!-- 操作方法 -->
 				<input type="hidden" id="${id}" name="${id}" />
-				<p:commandLink id="delBtn" action="#{pM${Entity}Ctrl.del}" oncomplete="clk('form:pageTurn')" update="errMsg" />
+                <p:commandLink id="delBtn" action="#{pM${Entity}Ctrl.del}" oncomplete="pfCallback(xhr, status, args, cb)" update="errMsg" />
 			</div>
 		</h:form>
 	</ui:define>
@@ -112,6 +112,10 @@
 			clk("form:delBtn");
 		}
 	}
+
+    function cb() {
+        clk("form:pageTurn");
+    }
 	
 	//]]>
 	</script>

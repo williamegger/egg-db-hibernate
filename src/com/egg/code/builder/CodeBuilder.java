@@ -14,157 +14,180 @@ import com.egg.code.vm.Tlp;
 
 public class CodeBuilder {
 
-	public static void main(String[] args) {
-		CodeBuilder builder = new CodeBuilder();
-		builder.build(Bean.class);
-	}
+    public static void main(String[] args) {
+        CodeBuilder builder = new CodeBuilder();
+        builder.build();
+    }
 
-	// ==========================================
+    // ================================================================
+    // 根据项目修改
+    // ================================================================
+    // TODO : 根据项目修改
+    private static final String rootPackage = "com.leihuo";
+    private static final String idaoPackage = rootPackage + ".model.dao";
+    private static final String daoPackage = rootPackage + ".model.dao.impl";
+    private static final String iserPackage = rootPackage + ".model.service";
+    private static final String serPackage = rootPackage + ".model.service.impl";
+    private static final String searchBeanPackage = rootPackage + ".view.bean.searchBean";
+    private static final String adminCtrlPackage = rootPackage + ".view.ctrl.admin";
 
-	private static final String iDaoFile = "d:/code/IDao/I{0}Dao.java";
-	private static final String daoFile = "d:/code/Dao/{0}Dao.java";
-	private static final String iSerFile = "d:/code/ISer/I{0}Service.java";
-	private static final String serFile = "d:/code/Ser/{0}Service.java";
-	private static final String searchBeanFile = "d:/code/searchBean/{0}SearchBean.java";
-	// 后台管理Ctrl
-	private static final String ctrlFile = "d:/code/ctrl/PM{0}Ctrl.java";
-	// 后台管理页面
-	private static final String listFile = "d:/code/page/{0}/list.xhtml";
-	private static final String viewFile = "d:/code/page/{0}/view.xhtml";
-	private static final String addFile = "d:/code/page/{0}/add.xhtml";
-	private static final String editFile = "d:/code/page/{0}/edit.xhtml";
 
-	private static final String rootPackage = "com.egg";
-	private static final String CommonsPackage = "com.egg.commons";
-	private static final String PageInfoPackage = "com.egg.commons.db.hibernate.bean";
-	private static final String DBHelperPackage = "com.egg.commons.db.hibernate.helper";
-	private static final String QueryPackage = "com.egg.commons.db.hibernate.query";
-	private static final String LogPackage = "org.slf4j";
-	private static final String Log = "Logger";
-	private static final String LogFactory = "LoggerFactory";
-	private static final String getLog = "getLogger";
+    private static final String CommonsPackage = "com.egg.common";
+    private static final String PageInfoPackage = "com.egg.db.hibernate.bean";
+    private static final String DBHelperPackage = "com.egg.db.hibernate.helper";
+    private static final String QueryPackage = "com.egg.db.hibernate.query";
+    private static final String LogPackage = "org.slf4j";
+    private static final String Log = "Logger";
+    private static final String LogFactory = "LoggerFactory";
+    private static final String getLog = "getLogger";
 
-	public void build(Class<?>... classes) {
-		if (classes == null || classes.length == 0) {
-			return;
-		}
+    // save file
+    private static final String _DIR = "d:/_build/code/";
+    private static final String iDaoFile = _DIR + idaoPackage.replaceAll("[.]", "/") + "/I{0}Dao.java";
+    private static final String daoFile = _DIR + daoPackage.replaceAll("[.]", "/") + "/{0}Dao.java";
+    private static final String iSerFile = _DIR + iserPackage.replaceAll("[.]", "/") + "/I{0}Service.java";
+    private static final String serFile = _DIR + serPackage.replaceAll("[.]", "/") + "/{0}Service.java";
+    private static final String searchBeanFile = _DIR + searchBeanPackage.replaceAll("[.]", "/") + "/{0}SearchBean.java";
+    // 后台管理Ctrl
+    private static final String ctrlFile = _DIR + adminCtrlPackage.replaceAll("[.]", "/") + "/PM{0}Ctrl.java";
+    // 后台管理页面
+    private static final String listFile = _DIR + "/page/{0}/list.xhtml";
+    private static final String viewFile = _DIR + "/page/{0}/view.xhtml";
+    private static final String addFile = _DIR + "/page/{0}/add.xhtml";
+    private static final String editFile = _DIR + "/page/{0}/edit.xhtml";
 
-		buildServiceFactory(classes);
 
-		Map<String, Object> map = null;
-		for (Class<?> clazz : classes) {
-			map = this.createContextMap(clazz);
-			if (map == null || map.isEmpty()) {
-				continue;
-			}
+    public void build(Class<?>... classes) {
+        if (classes == null || classes.length == 0) {
+            return;
+        }
 
-			String filename = clazz.getSimpleName();
-			String lFilename = Common.firstLower(clazz.getSimpleName());
+        buildServiceFactory(classes);
 
-			VelocityUtil.buildFile(Tlp.PATH, "IDao.vm", MessageFormat.format(iDaoFile, filename), map);
-			VelocityUtil.buildFile(Tlp.PATH, "Dao.vm", MessageFormat.format(daoFile, filename), map);
-			VelocityUtil.buildFile(Tlp.PATH, "ISer.vm", MessageFormat.format(iSerFile, filename), map);
-			VelocityUtil.buildFile(Tlp.PATH, "Ser.vm", MessageFormat.format(serFile, filename), map);
-			VelocityUtil.buildFile(Tlp.PATH, "SearchBean.vm", MessageFormat.format(searchBeanFile, filename), map);
+        Map<String, Object> map = null;
+        for (Class<?> clazz : classes) {
+            map = this.createContextMap(clazz);
+            if (map == null || map.isEmpty()) {
+                continue;
+            }
 
-			VelocityUtil.buildFile(Tlp.PATH, "pf_ctrl.vm", MessageFormat.format(ctrlFile, filename), map);
-			VelocityUtil.buildFile(Tlp.PATH, "pf_view.vm", MessageFormat.format(viewFile, lFilename), map);
-			VelocityUtil.buildFile(Tlp.PATH, "pf_edit.vm", MessageFormat.format(editFile, lFilename), map);
-			VelocityUtil.buildFile(Tlp.PATH, "pf_add.vm", MessageFormat.format(addFile, lFilename), map);
-			VelocityUtil.buildFile(Tlp.PATH, "pf_list.vm", MessageFormat.format(listFile, lFilename), map);
-		}
+            String filename = clazz.getSimpleName();
+            String lFilename = Common.firstLower(clazz.getSimpleName());
 
-		System.out.println("// ===== over");
-	}
+            VelocityUtil.buildFile(Tlp.PATH, "IDao.vm", MessageFormat.format(iDaoFile, filename), map);
+            VelocityUtil.buildFile(Tlp.PATH, "Dao.vm", MessageFormat.format(daoFile, filename), map);
+            VelocityUtil.buildFile(Tlp.PATH, "ISer.vm", MessageFormat.format(iSerFile, filename), map);
+            VelocityUtil.buildFile(Tlp.PATH, "Ser.vm", MessageFormat.format(serFile, filename), map);
+            VelocityUtil.buildFile(Tlp.PATH, "SearchBean.vm", MessageFormat.format(searchBeanFile, filename), map);
 
-	private Map<String, Object> createContextMap(Class<?> clazz) {
-		Map<String, Object> map = new HashMap<String, Object>();
+            VelocityUtil.buildFile(Tlp.PATH, "pf_ctrl.vm", MessageFormat.format(ctrlFile, filename), map);
+            VelocityUtil.buildFile(Tlp.PATH, "pf_view.vm", MessageFormat.format(viewFile, lFilename), map);
+            VelocityUtil.buildFile(Tlp.PATH, "pf_edit.vm", MessageFormat.format(editFile, lFilename), map);
+            VelocityUtil.buildFile(Tlp.PATH, "pf_add.vm", MessageFormat.format(addFile, lFilename), map);
+            VelocityUtil.buildFile(Tlp.PATH, "pf_list.vm", MessageFormat.format(listFile, lFilename), map);
+        }
 
-		// 包
-		map.put("rootPackage", rootPackage);
-		map.put("CommonsPackage", CommonsPackage);
-		map.put("PageInfoPackage", PageInfoPackage);
-		map.put("entityPackage", rootPackage + ".model.entity");
-		map.put("idaoPackage", rootPackage + ".model.dao");
-		map.put("daoPackage", rootPackage + ".model.dao.impl");
-		map.put("iserPackage", rootPackage + ".model.service");
-		map.put("serPackage", rootPackage + ".model.service.impl");
-		map.put("ePackage", rootPackage + ".model.exception");
+        System.out.println("// ===== over");
+    }
 
-		map.put("DBHelperPackage", DBHelperPackage);
-		map.put("QueryPackage", QueryPackage);
-		map.put("LogPackage", LogPackage);
-		map.put("Log", Log);
-		map.put("LogFactory", LogFactory);
-		map.put("getLog", getLog);
+    private Map<String, Object> createContextMap(Class<?> clazz) {
+        Map<String, Object> map = new HashMap<String, Object>();
 
-		// Entity
-		String entityname = clazz.getSimpleName();
-		map.put("Entity", entityname);
-		map.put("entity", Common.firstLower(entityname));
-		map.put("hasDel", false);
-		map.put("hasCreateDate", false);
-		map.put("hasLastDate", false);
-		String fieldName;
-		boolean isFirst = true;
-		List<Map<String, Object>> fieldList = new ArrayList<Map<String, Object>>();
-		Map<String, Object> fMap = null;
-		Field[] fields = clazz.getDeclaredFields();
-		for (Field field : fields) {
-			if (field.getModifiers() == Modifier.PRIVATE) {
-				fieldName = field.getName();
-				if ("deleted".equals(fieldName)) {
-					map.put("hasDel", true);
-				} else if ("createDate".equals(fieldName)) {
-					map.put("hasCreateDate", true);
-				} else if ("lastDate".equals(fieldName)) {
-					map.put("hasLastDate", true);
-				}
+        // 包
+        map.put("rootPackage", rootPackage);
+        map.put("idaoPackage", idaoPackage);
+        map.put("daoPackage", daoPackage);
+        map.put("iserPackage", iserPackage);
+        map.put("serPackage", serPackage);
+        map.put("searchBeanPackage", searchBeanPackage);
+        map.put("adminCtrlPackage", adminCtrlPackage);
 
-				if (isFirst) {
-					map.put("id", fieldName);
-					map.put("Id", Common.firstUpper(fieldName));
-					map.put("idType", field.getType().getSimpleName());
-					isFirst = false;
-				} else {
-					fMap = new HashMap<String, Object>();
-					fMap.put("name", fieldName);
-					fMap.put("Name", Common.firstUpper(fieldName));
-					fMap.put("Type", field.getType().getSimpleName());
-					fMap.put("isRef", Common.isRef(field.getType()));
+        map.put("CommonsPackage", CommonsPackage);
+        map.put("PageInfoPackage", PageInfoPackage);
+        map.put("entityPackage", rootPackage + ".model.entity");
+        map.put("ePackage", rootPackage + ".model.exception");
 
-					fieldList.add(fMap);
-				}
-			}
-		}
-		map.put("fieldList", fieldList);
-		return map;
-	}
+        map.put("DBHelperPackage", DBHelperPackage);
+        map.put("QueryPackage", QueryPackage);
+        map.put("LogPackage", LogPackage);
+        map.put("Log", Log);
+        map.put("LogFactory", LogFactory);
+        map.put("getLog", getLog);
 
-	private void buildServiceFactory(Class<?>... classes) {
-		if (classes == null || classes.length == 0) {
-			return;
-		}
+        // Entity
+        String entityname = clazz.getSimpleName();
+        map.put("Entity", entityname);
+        map.put("entity", Common.firstLower(entityname));
+        map.put("hasDel", false);
+        map.put("hasCreateDate", false);
+        map.put("hasLastDate", false);
+        map.put("hasCreateMan", false);
+        map.put("hasLastMan", false);
+        String fieldName;
+        boolean isFirst = true;
+        List<Map<String, Object>> fieldList = new ArrayList<Map<String, Object>>();
+        Map<String, Object> fMap = null;
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.getModifiers() == Modifier.PRIVATE) {
+                fieldName = field.getName();
+                if ("deleted".equals(fieldName)) {
+                    map.put("hasDel", true);
+                } else if ("createDate".equals(fieldName)) {
+                    map.put("hasCreateDate", true);
+                } else if ("lastDate".equals(fieldName)) {
+                    map.put("hasLastDate", true);
+                } else if ("createMan".equals(fieldName)) {
+                    map.put("hasCreateMan", true);
+                } else if ("lastMan".equals(fieldName)) {
+                    map.put("hasLastMan", true);
+                }
 
-		String tlp = "public static I{0}Service getI{0}Service() '{'return {0}Service.getInstance();'}'";
-		System.out.println("---------------------");
-		System.out.println("ServeFactory");
-		System.out.println("---------------------");
-		for (Class<?> cla : classes) {
-			System.out.println(MessageFormat.format(tlp, cla.getSimpleName()));
-		}
-	}
+                if (isFirst) {
+                    map.put("id", fieldName);
+                    map.put("Id", Common.firstUpper(fieldName));
+                    map.put("idType", field.getType().getSimpleName());
+                    isFirst = false;
+                } else {
+                    fMap = new HashMap<String, Object>();
+                    fMap.put("name", fieldName);
+                    fMap.put("Name", Common.firstUpper(fieldName));
+                    fMap.put("Type", field.getType().getSimpleName());
+                    fMap.put("isRef", Common.isRef(field.getType()));
 
-	// ==========================================
-	public class Bean {
-		private Integer beanId;
-		private String username;
-		private String password;
-		private String nickname;
-		private Boolean deleted;
-		private Integer createMan;
-		private Long createDate;
-		private Integer lastMan;
-		private Long lastDate;
-	}
+                    fieldList.add(fMap);
+                }
+            }
+        }
+        map.put("fieldList", fieldList);
+        return map;
+    }
+
+    private void buildServiceFactory(Class<?>... classes) {
+        if (classes == null || classes.length == 0) {
+            return;
+        }
+
+        String tlp = "public static I{0}Service getI{0}Service() '{'return {0}Service.getInstance();'}'";
+        System.out.println("---------------------");
+        System.out.println("ServeFactory");
+        System.out.println("---------------------");
+        for (Class<?> cla : classes) {
+            System.out.println(MessageFormat.format(tlp, cla.getSimpleName()));
+        }
+    }
+
+    // ==========================================
+    public class Bean {
+        private Integer beanId;
+        private String username;
+        private String password;
+        private String nickname;
+        private Boolean deleted;
+        private Integer createMan;
+        private Long createDate;
+        private Integer lastMan;
+        private Long lastDate;
+    }
+
 }

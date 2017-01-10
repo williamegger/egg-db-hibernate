@@ -20,9 +20,13 @@ import com.egg.code.vm.Tlp;
 public class ApiBuilder {
 
 	public static void main(String[] args) {
+		ApiBuilder.build(
+			Void.class
+		);
+		System.exit(0);
 	}
 
-	private static final String baseUrl = "http://127.0.0.1/topDirectorServer";
+	private static final String baseUrl = "http://127.0.0.1/zhibo";
 	private static final String filepath = "D:/code/api/{0}API.html";
 
 	public static void build(Class<?>... classes) {
@@ -198,7 +202,7 @@ public class ApiBuilder {
 		String[] ps = params.split("\r\n");
 		for (String p : ps) {
 			String[] kv = p.split("=");
-			if ("cbfile".equals(kv[0].trim()) || "BIN".equals(kv[1].trim())) {
+			if ("cbfile".equals(kv[0].trim()) || "BIN".equals(kv[1].trim()) || "cb".equals(kv[1].trim())) {
 				sb.append(MessageFormat.format(inputFileTlp, kv[0].trim())).append("\r\n");
 			} else {
 				sb.append(MessageFormat.format(inputTxtTlp, kv[0].trim())).append("\r\n");

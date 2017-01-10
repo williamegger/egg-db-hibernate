@@ -7,7 +7,7 @@
 #foreach($field in ${fields}) ##
 #if (${field.isId}) ##
 		<id name="${field.name}" type="java.lang.${field.type}">
-			<column name="${field.column}" />
+			<column name="`${field.column}`" />
 #if (${field.type}=="String") ##
 			<generator class="uuid" />
 #else ##
@@ -16,16 +16,16 @@
 		</id>
 #elseif (${field.isRef}) ##
 		<many-to-one name="${field.name}" class="${packageName}.${field.type}" fetch="select">
-			<column name="${field.column}" />
+			<column name="`${field.column}`" />
 		</many-to-one>
 #else ##
 		<property name="${field.name}" type="java.lang.${field.type}">
 #if (${field.type}=="String") ##
-			<column name="${field.column}" length="${field.columnInfo.length}" />
+			<column name="`${field.column}`" length="${field.columnInfo.length}" />
 #elseif (${field.type}=="Double") ##
-			<column name="${field.column}" precision="${field.columnInfo.precision}" />
+			<column name="`${field.column}`" precision="${field.columnInfo.precision}" />
 #else ##
-			<column name="${field.column}" />
+			<column name="`${field.column}`" />
 #end ##
 		</property>
 #end ##

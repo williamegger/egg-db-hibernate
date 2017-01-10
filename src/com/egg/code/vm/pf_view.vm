@@ -5,7 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:utils="http://java.sun.com/jsf/composite/utils"
-	template="/templates/admin.xhtml">
+	template="/admin/_template/admin.xhtml">
 
 	<ui:define name="init"><h:outputText value="#{pM${Entity}Ctrl.initView}" /></ui:define>
 	<ui:define name="content_title">查看${Entity}</ui:define>

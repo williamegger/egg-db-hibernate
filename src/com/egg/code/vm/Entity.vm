@@ -3,6 +3,7 @@ package ${packageName};
 #foreach($ref in ${refs})
 import ${packageName}.${ref};
 #end
+import com.egg.common.utils.DateTimeUtil;
 
 public class ${Entity} implements java.io.Serializable {
 
@@ -21,6 +22,12 @@ public class ${Entity} implements java.io.Serializable {
 	public void set${field.Name}(${field.type} ${field.name}) {
 		this.${field.name} = ${field.name};
 	}
+
+#if(${field.Name.endsWith("Date")} && (${field.type} == "Long" || ${field.type} == "long"))
+	public String get${field.Name}Str() {
+		return DateTimeUtil.formatDateTime(${field.name});
+	}
+#end
 
 #end
 }

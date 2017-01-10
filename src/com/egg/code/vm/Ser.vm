@@ -2,8 +2,9 @@ package ${serPackage};
 
 import java.util.List;
 
-import ${LogPackage}.${Log};
-import ${LogPackage}.${LogFactory};
+import com.egg.common.log.LogKit;
+//import ${LogPackage}.${Log};
+//import ${LogPackage}.${LogFactory};
 
 import ${PageInfoPackage}.PageInfo;
 
@@ -13,11 +14,11 @@ import ${entityPackage}.${Entity};
 import ${ePackage}.ServiceException;
 import ${iserPackage}.I${Entity}Service;
 
-import ${rootPackage}.view.bean.searchBean.${Entity}SearchBean;
+import ${searchBeanPackage}.${Entity}SearchBean;
 
 public class ${Entity}Service implements I${Entity}Service {
 
-	private static final ${Log} LOG = ${LogFactory}.${getLog}(${Entity}Dao.class);
+	//private static final ${Log} LOG = ${LogFactory}.${getLog}(${Entity}Dao.class);
 
 	private static ${Entity}Service instance = null;
 
@@ -38,7 +39,7 @@ public class ${Entity}Service implements I${Entity}Service {
 			return getI${Entity}().save(${entity});
 		} catch (Exception e) {
 			String errorMsg = ${Entity}Service.class + ".save():" + e.getMessage();
-			LOG.error(errorMsg, e);
+			LogKit.error(errorMsg, e);
 			throw new ServiceException(errorMsg, e);
 		}
 	}
@@ -49,7 +50,18 @@ public class ${Entity}Service implements I${Entity}Service {
 			getI${Entity}().update(${entity});
 		} catch (Exception e) {
 			String errorMsg = ${Entity}Service.class + ".update():" + e.getMessage();
-			LOG.error(errorMsg, e);
+			LogKit.error(errorMsg, e);
+			throw new ServiceException(errorMsg, e);
+		}
+	}
+	
+	@Override
+	public void updateById(${idType} ${id}, String[] sets, String[] wheres, Object[] params) throws ServiceException {
+		try {
+			getI${Entity}().updateById(${id}, sets, wheres, params);
+		} catch (Exception e) {
+			String errorMsg = ${Entity}Service.class + ".updateById():" + e.getMessage();
+			LogKit.error(errorMsg, e);
 			throw new ServiceException(errorMsg, e);
 		}
 	}
@@ -60,7 +72,7 @@ public class ${Entity}Service implements I${Entity}Service {
 			getI${Entity}().del(${entity});
 		} catch (Exception e) {
 			String errorMsg = ${Entity}Service.class + ".del():" + e.getMessage();
-			LOG.error(errorMsg, e);
+			LogKit.error(errorMsg, e);
 			throw new ServiceException(errorMsg, e);
 		}
 	}
@@ -71,7 +83,7 @@ public class ${Entity}Service implements I${Entity}Service {
 			return getI${Entity}().get(${id});
 		} catch (Exception e) {
 			String errorMsg = ${Entity}Service.class + ".get():" + e.getMessage();
-			LOG.error(errorMsg, e);
+			LogKit.error(errorMsg, e);
 			throw new ServiceException(errorMsg, e);
 		}
 	}
@@ -82,7 +94,7 @@ public class ${Entity}Service implements I${Entity}Service {
 			return getI${Entity}().exist(${id});
 		} catch (Exception e) {
 			String errorMsg = ${Entity}Service.class + ".exist():" + e.getMessage();
-			LOG.error(errorMsg, e);
+			LogKit.error(errorMsg, e);
 			throw new ServiceException(errorMsg, e);
 		}
 	}
@@ -93,7 +105,7 @@ public class ${Entity}Service implements I${Entity}Service {
 			return getI${Entity}().get(key, value);
 		} catch (Exception e) {
 			String errorMsg = ${Entity}Service.class + ".get():" + e.getMessage();
-			LOG.error(errorMsg, e);
+			LogKit.error(errorMsg, e);
 			throw new ServiceException(errorMsg, e);
 		}
 	}
@@ -104,7 +116,7 @@ public class ${Entity}Service implements I${Entity}Service {
 			return getI${Entity}().exist(key, value);
 		} catch (Exception e) {
 			String errorMsg = ${Entity}Service.class + ".exist():" + e.getMessage();
-			LOG.error(errorMsg, e);
+			LogKit.error(errorMsg, e);
 			throw new ServiceException(errorMsg, e);
 		}
 	}
@@ -115,7 +127,18 @@ public class ${Entity}Service implements I${Entity}Service {
 			return getI${Entity}().findBySearch(max, search);
 		} catch (Exception e) {
 			String errorMsg = ${Entity}Service.class + ".findBySearch():" + e.getMessage();
-			LOG.error(errorMsg, e);
+			LogKit.error(errorMsg, e);
+			throw new ServiceException(errorMsg, e);
+		}
+	}
+	
+	@Override
+	public List<${Entity}> findBySearch(int page, int rows, ${Entity}SearchBean search) throws ServiceException {
+		try {
+			return getI${Entity}().findBySearch(page, rows, search);
+		} catch (Exception e) {
+			String errorMsg = ${Entity}Service.class + ".findBySearch():" + e.getMessage();
+			LogKit.error(errorMsg, e);
 			throw new ServiceException(errorMsg, e);
 		}
 	}
@@ -126,7 +149,7 @@ public class ${Entity}Service implements I${Entity}Service {
 			return getI${Entity}().findPageBySearch(page, rows, search);
 		} catch (Exception e) {
 			String errorMsg = ${Entity}Service.class + ".findPageBySearch():" + e.getMessage();
-			LOG.error(errorMsg, e);
+			LogKit.error(errorMsg, e);
 			throw new ServiceException(errorMsg, e);
 		}
 	}

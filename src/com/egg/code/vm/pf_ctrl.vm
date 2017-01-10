@@ -9,16 +9,16 @@ import ${entityPackage}.${Entity};
 import ${entityPackage}.${f.Type};
 #end
 #end
-import ${rootPackage}.model.service.I${Entity}Service;
+import ${iserPackage}.I${Entity}Service;
 #foreach($f in ${fieldList})
 #if(${f.isRef})
-import ${rootPackage}.model.service.I${f.Type}Service;
+import ${iserPackage}.I${f.Type}Service;
 #end
 #end
 import ${rootPackage}.model.service.ServiceFactory;
 import ${rootPackage}.view.base.BaseCtrl;
 import ${PageInfoPackage}.PageInfo;
-import ${rootPackage}.view.bean.searchBean.${Entity}SearchBean;
+import ${searchBeanPackage}.${Entity}SearchBean;
 
 /**
  * 后台管理 - ${Entity}
@@ -219,8 +219,10 @@ public class PM${Entity}Ctrl extends BaseCtrl {
 	/**
 	 * 删除
 	 */
-	public String del() {
+	public void del() {
 		try {
+			faces.addOptStatus(false);
+
 #if(${idType}=="String")
 			String ${id} = faces.param("${id}");
 #else
@@ -233,10 +235,12 @@ public class PM${Entity}Ctrl extends BaseCtrl {
 #end
 				getI${Entity}().del(${entity});
 			}
+
+			faces.info("操作成功");
+			faces.addOptStatus(true);
 		} catch (Exception e) {
 			logE(".del()", e);
 		}
-		return "";
 	}
 
 	// ============

@@ -2,10 +2,11 @@ package ${rootPackage}.view.bean.searchBean;
 
 import java.util.Date;
 
-import ${CommonsPackage}.DateTimeUtil;
+import ${CommonsPackage}.utils.DateTimeUtil;
 
 public class ${Entity}SearchBean {
 
+	private String q${Id};
 #foreach($f in ${fieldList})
 #if(${f.isRef} || ${f.Type}=="Long" || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createDate" || ${f.name}=="createMan" || ${f.name}=="lastDate" || ${f.name}=="lastMan")
 #elseif(${f.Type}=="Boolean" || ${f.Type}=="Integer")
@@ -22,6 +23,13 @@ public class ${Entity}SearchBean {
 	public ${Entity}SearchBean() {
 	}
 
+	public String getq${Id}() {
+		return q${Id};
+	}
+
+	public void setq${Id}(String q${Id}) {
+		this.q${Id} = q${Id};
+	}
 #foreach($f in ${fieldList})
 #if(${f.isRef} || ${f.Type}=="Long" || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createDate" || ${f.name}=="createMan" || ${f.name}=="lastDate" || ${f.name}=="lastMan")
 #elseif(${f.Type}=="Boolean" || ${f.Type}=="Integer")
