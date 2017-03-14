@@ -2,7 +2,7 @@ package com.egg.db.hibernate.exception;
 
 import com.alibaba.fastjson.JSONObject;
 
-public class BLException extends Exception {
+public class BLException extends Throwable {
 
 	private int err;
 	private String msg;
