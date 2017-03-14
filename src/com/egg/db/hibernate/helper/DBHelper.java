@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,6 +98,38 @@ public class DBHelper {
 			}
 
 			throw error(".doWorker()", e);
+		} finally {
+			if (idf != null && session != null) {
+				closeQuickly(idf);
+			}
+		}
+	}
+	
+	public static void workByJDBC(Work work) throws Exception {
+		if (work == null) {
+			return;
+		}
+
+		Object idf = null;
+		Session session = null;
+		Transaction tx = null;
+		try {
+			idf = HibernateUtil.createSession();
+			session = HibernateUtil.getSession();
+			tx = session.beginTransaction();
+
+			session.doWork(work);
+
+			session.flush();
+			session.clear();
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null) {
+				tx.rollback();
+				session.clear();
+			}
+
+			throw error(".workByJDBC()", e);
 		} finally {
 			if (idf != null && session != null) {
 				closeQuickly(idf);
