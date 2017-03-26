@@ -14,6 +14,24 @@ public class ${Entity} implements java.io.Serializable {
 	public ${Entity}() {
 	}
 
+	public static ${Entity} newDefault() {
+		${Entity} obj = new ${Entity}();
+#foreach($field in ${fields})
+#if($util.isNotBlank(${field.columnInfo.def}))
+#if(${field.type} == "String")
+		obj.set${field.Name}("$!{field.columnInfo.def}");
+#elseif(${field.type} == "Boolean" && $!{field.columnInfo.def}=="0")
+		obj.set${field.Name}(false);
+#elseif(${field.type} == "Boolean" && $!{field.columnInfo.def}=="1")
+		obj.set${field.Name}(true);
+#else
+		obj.set${field.Name}($!{field.columnInfo.def});
+#end
+#end
+#end
+		return obj;
+	}
+
 #foreach($field in ${fields})
 	public ${field.type} get${field.Name}() {
 		return ${field.name};

@@ -1,5 +1,9 @@
 package com.egg.code.builder;
 
+import com.egg.code.commons.Common;
+import com.egg.code.commons.VelocityUtil;
+import com.egg.code.vm.Tlp;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
@@ -8,22 +12,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.egg.code.commons.Common;
-import com.egg.code.commons.VelocityUtil;
-import com.egg.code.vm.Tlp;
-
 public class CodeBuilder {
 
     public static void main(String[] args) {
         CodeBuilder builder = new CodeBuilder();
-        builder.build();
+        builder.build(
+            Void.class
+        );
     }
 
     // ================================================================
     // 根据项目修改
     // ================================================================
     // TODO : 根据项目修改
-    private static final String rootPackage = "com.leihuo";
+    private static final String rootPackage = "com.prj.server";
     private static final String idaoPackage = rootPackage + ".model.dao";
     private static final String daoPackage = rootPackage + ".model.dao.impl";
     private static final String iserPackage = rootPackage + ".model.service";

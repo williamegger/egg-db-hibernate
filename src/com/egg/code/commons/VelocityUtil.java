@@ -1,15 +1,15 @@
 package com.egg.code.commons;
 
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 import java.util.Properties;
-
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
 
 public class VelocityUtil {
 
@@ -27,11 +27,12 @@ public class VelocityUtil {
 			p.setProperty("input.encoding", "UTF-8");
 			p.setProperty("output.encoding", "UTF-8");
 			p.setProperty("runtime.log.info.stacktrace", "false");
-			p.setProperty("runtime.log", "d:/logs/velocity.log");
+			p.setProperty("runtime.log", "d:/_build/logs/velocity.log");
 			p.setProperty("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.Log4JLogChute");
 			engine.init(p);
 
 			VelocityContext context = new VelocityContext(contextMap);
+			context.put("util", UtilFun.getInstance());
 			Template tlp = engine.getTemplate(tlpName);
 			writer = new FileWriter(file);
 			tlp.merge(context, writer);

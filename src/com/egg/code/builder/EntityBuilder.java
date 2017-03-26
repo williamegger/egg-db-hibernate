@@ -11,12 +11,12 @@ public class EntityBuilder {
 
     public static void main(String[] args) {
         // 根据项目修改
-        final String database = "leihuo";
-        final String packageName = "com.leihuo.model.entity";
+        final String database = "mj_xuezhan";
+        final String packageName = "com.prj.server.model.entity";
 
         String fileDir = "D:/_build/code/" + packageName.replaceAll("[.]", "/");
         build(new String[]{
-                "admin","article","catalog","conf","content","friendlylink","module","pic","template"
+                "sys_conf"
         }, database, packageName, fileDir);
 
         System.out.println("OVER");
@@ -63,6 +63,7 @@ public class EntityBuilder {
         wrap_types.put("varbinary", "String");
         wrap_types.put("varchar", "String");
         wrap_types.put("text", "String");
+        wrap_types.put("timestamp", "java.sql.Timestamp");
     }
 
     private static String getJavaWrapType(String sqlType, Integer precision) {
@@ -96,6 +97,15 @@ public class EntityBuilder {
         if (Common.isBlank(column)) {
             return null;
         }
+
+        String nullable = (String) column.get("nullable");
+        if (nullable == null || !"NO".equalsIgnoreCase(nullable)) {
+            nullable = "false";
+        } else {
+            nullable = "true";
+        }
+        column.put("nullable", nullable);
+
         Map<String, Object> field = new HashMap<String, Object>();
         field.put("columnInfo", column);
         field.put("column", column.get("name"));

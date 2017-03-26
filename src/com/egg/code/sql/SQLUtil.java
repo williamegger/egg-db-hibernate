@@ -16,9 +16,9 @@ import java.util.Map;
 
 public class SQLUtil {
 
-	protected static final String url = "jdbc:mysql://192.168.0.163:3306/information_schema";
-	protected static final String username = "root";
-	protected static final String password = "banbantong";
+	protected static final String url = "jdbc:mysql://127.0.0.1:3306/information_schema";
+	protected static final String username = "admin";
+	protected static final String password = "admin";
 
 	public Connection getConnection() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");

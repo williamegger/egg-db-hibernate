@@ -43,6 +43,8 @@ public class MySQLUtil extends SQLUtil {
 	 * precision
 	 * scale
 	 * ref
+	 * nullable
+	 * def
 	 * </pre>
 	 */
 	public List<Map<String, Object>> getColumns(String database, String table) {
@@ -53,7 +55,9 @@ public class MySQLUtil extends SQLUtil {
 		sql.append("	s1.CHARACTER_MAXIMUM_LENGTH as `length`, ");
 		sql.append("	s1.NUMERIC_PRECISION as `precision`, ");
 		sql.append("	s1.NUMERIC_SCALE as `scale`, ");
-		sql.append("	s2.REFERENCED_TABLE_NAME as `ref` ");
+		sql.append("	s2.REFERENCED_TABLE_NAME as `ref`, ");
+		sql.append("	s1.IS_NULLABLE as `nullable`, ");
+		sql.append("	s1.COLUMN_DEFAULT as `def` ");
 		sql.append("FROM ");
 		sql.append("	`COLUMNS` AS s1 ");
 		sql.append("LEFT JOIN KEY_COLUMN_USAGE AS s2 ON s1.TABLE_SCHEMA = s2.TABLE_SCHEMA ");

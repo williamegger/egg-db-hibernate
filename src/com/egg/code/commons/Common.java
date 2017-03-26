@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 public class Common {
-
+	
 	public static boolean isRef(Class<?> cla) {
 		return !(cla == Integer.class
 				|| cla == Long.class

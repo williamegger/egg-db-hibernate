@@ -19,7 +19,7 @@
 			<column name="`${field.column}`" />
 		</many-to-one>
 #else ##
-		<property name="${field.name}" type="java.lang.${field.type}">
+		<property name="${field.name}" type="java.lang.${field.type}" not-null="${field.columnInfo.nullable}">
 #if (${field.type}=="String") ##
 			<column name="`${field.column}`" length="${field.columnInfo.length}" />
 #elseif (${field.type}=="Double") ##
