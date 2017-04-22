@@ -202,7 +202,7 @@ public class ${Entity}Dao implements I${Entity}Dao {
 					.eq("s1." + key, value)
 					.hql().one();
 		} catch (Exception e) {
-			String errorMsg = AdminDao.class + ".get():" + e.getMessage();
+			String errorMsg = ${Entity}Dao.class + ".get():" + e.getMessage();
 			LogKit.error(errorMsg, e);
 			throw new DaoException(errorMsg, e);
 		}
@@ -229,7 +229,7 @@ public class ${Entity}Dao implements I${Entity}Dao {
 			String hql = query.getSelect();
 			return DBHelper.hql.one(hql, params);
 		} catch (Exception e) {
-			String errorMsg = AdminDao.class + ".get():" + e.getMessage();
+			String errorMsg = ${Entity}Dao.class + ".get():" + e.getMessage();
 			LogKit.error(errorMsg, e);
 			throw new DaoException(errorMsg, e);
 		}
@@ -273,7 +273,7 @@ public class ${Entity}Dao implements I${Entity}Dao {
 					.eq("s1." + key, value)
 					.hql().exist();
 		} catch (Exception e) {
-			String errorMsg = AdminDao.class + ".exist():" + e.getMessage();
+			String errorMsg = ${Entity}Dao.class + ".exist():" + e.getMessage();
 			LogKit.error(errorMsg, e);
 			throw new DaoException(errorMsg, e);
 		}
