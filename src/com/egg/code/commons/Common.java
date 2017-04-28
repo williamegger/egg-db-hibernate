@@ -14,7 +14,9 @@ public class Common {
 				|| cla == int.class
 				|| cla == long.class
 				|| cla == double.class
-				|| cla == boolean.class);
+				|| cla == boolean.class
+				|| cla == java.sql.Timestamp.class
+		);
 	}
 
 	public static String firstUpper(String str) {

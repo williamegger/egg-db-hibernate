@@ -3,7 +3,9 @@ package com.egg.code.builder;
 import com.egg.code.commons.Common;
 import com.egg.code.commons.VelocityUtil;
 import com.egg.code.vm.Tlp;
+import com.egg.common.utils.FileUtil;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
@@ -17,7 +19,7 @@ public class CodeBuilder {
     public static void main(String[] args) {
         CodeBuilder builder = new CodeBuilder();
         builder.build(
-            Void.class
+                Void.class
         );
     }
 
@@ -58,6 +60,15 @@ public class CodeBuilder {
     private static final String addFile = _DIR + "/page/{0}/add.xhtml";
     private static final String editFile = _DIR + "/page/{0}/edit.xhtml";
 
+    // 导出Excel
+    private static final String exportBeanPackage = rootPackage + ".view.bean.exportBean";
+    private static final String ExcelExportPackage = rootPackage + ".common.oa";
+    private static final String exportBeanFile = _DIR + exportBeanPackage.replaceAll("[.]", "/") + "/{0}Bean.java";
+
+    private static final String ExportActionPackage = rootPackage + ".view.action.back";
+    private static final String ExportActionName = "ExportAction";
+    private static final String ExportActionUrl = "/export";
+    private static final String ExportActionFile = _DIR + ExportActionPackage.replaceAll("[.]", "/") + "/" + ExportActionName + ".java";
 
     public void build(Class<?>... classes) {
         if (classes == null || classes.length == 0) {
@@ -66,6 +77,7 @@ public class CodeBuilder {
 
         buildServiceFactory(classes);
 
+        List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
         Map<String, Object> map = null;
         for (Class<?> clazz : classes) {
             map = this.createContextMap(clazz);
@@ -81,13 +93,17 @@ public class CodeBuilder {
             VelocityUtil.buildFile(Tlp.PATH, "ISer.vm", MessageFormat.format(iSerFile, filename), map);
             VelocityUtil.buildFile(Tlp.PATH, "Ser.vm", MessageFormat.format(serFile, filename), map);
             VelocityUtil.buildFile(Tlp.PATH, "SearchBean.vm", MessageFormat.format(searchBeanFile, filename), map);
+            VelocityUtil.buildFile(Tlp.PATH, "ExportBean.vm", MessageFormat.format(exportBeanFile, filename), map);
 
             VelocityUtil.buildFile(Tlp.PATH, "pf_ctrl.vm", MessageFormat.format(ctrlFile, filename), map);
             VelocityUtil.buildFile(Tlp.PATH, "pf_view.vm", MessageFormat.format(viewFile, lFilename), map);
             VelocityUtil.buildFile(Tlp.PATH, "pf_edit.vm", MessageFormat.format(editFile, lFilename), map);
             VelocityUtil.buildFile(Tlp.PATH, "pf_add.vm", MessageFormat.format(addFile, lFilename), map);
             VelocityUtil.buildFile(Tlp.PATH, "pf_list.vm", MessageFormat.format(listFile, lFilename), map);
+
+            mapList.add(map);
         }
+        buildExportAction(mapList);
 
         System.out.println("// ===== over");
     }
@@ -115,6 +131,12 @@ public class CodeBuilder {
         map.put("Log", Log);
         map.put("LogFactory", LogFactory);
         map.put("getLog", getLog);
+
+        map.put("exportBeanPackage", exportBeanPackage);
+        map.put("ExcelExportPackage", ExcelExportPackage);
+        map.put("ExportActionPackage", ExportActionPackage);
+        map.put("ExportActionName", ExportActionName);
+        map.put("ExportActionUrl", ExportActionUrl);
 
         // Entity
         String entityname = clazz.getSimpleName();
@@ -176,6 +198,52 @@ public class CodeBuilder {
         System.out.println("---------------------");
         for (Class<?> cla : classes) {
             System.out.println(MessageFormat.format(tlp, cla.getSimpleName()));
+        }
+    }
+
+    private void buildExportAction(List<Map<String, Object>> mapList) {
+        try {
+            if (mapList == null || mapList.isEmpty()) {
+                return;
+            }
+
+            // 复制项目中的ExportAction.java，如果没有则创建新文件
+            File codeFile = new File(ExportActionFile);
+            if (!codeFile.exists()) {
+                String fileName = ExportActionName + ".java";
+                String prjRoot = System.getProperty("user.dir");
+                String prjFilePath = prjRoot + "/src/" + ExportActionPackage.replaceAll("[.]", "/") + "/" + fileName;
+                File prjFile = new File(prjFilePath);
+                if (prjFile.exists()) {
+                    FileUtil.copyFile(new File(prjFilePath), codeFile);
+                } else {
+                    VelocityUtil.buildFile(Tlp.PATH, "ExportAction.vm", ExportActionFile, new HashMap<String, Object>());
+                }
+            }
+            final String txt = FileUtil.readText(codeFile);
+            int headIndex = txt.indexOf("import");
+            int footIndex = txt.lastIndexOf("}");
+
+            // 生成import和方法
+            StringBuilder importTxt = new StringBuilder();
+            StringBuilder methodTxt = new StringBuilder();
+            for (int i = 0, len = mapList.size(); i < len; i++) {
+                importTxt.append(VelocityUtil.buildStr(Tlp.PATH, "ExportActionImport.vm", mapList.get(i)));
+                methodTxt.append(VelocityUtil.buildStr(Tlp.PATH, "ExportActionMethod.vm", mapList.get(i)));
+            }
+
+            // 拼装结果
+            StringBuilder rlt = new StringBuilder();
+            rlt.append(txt.substring(0, headIndex))
+                    .append(importTxt)
+                    .append(txt.substring(headIndex, footIndex))
+                    .append(methodTxt)
+                    .append(txt.substring(footIndex));
+
+            // 保存文件
+            FileUtil.save(rlt.toString(), codeFile);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

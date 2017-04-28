@@ -51,6 +51,7 @@ public class PM${Entity}Ctrl extends BaseCtrl {
 			${Entity}SearchBean search = toBean(${Entity}SearchBean.class);
 			PageInfo pi = getI${Entity}().findPageBySearch(page, rows, search);
 			faces.attr("pi", pi);
+			faces.attr("search", search);
 		} catch (Exception e) {
 			logE(".getLazy()", e);
 		}

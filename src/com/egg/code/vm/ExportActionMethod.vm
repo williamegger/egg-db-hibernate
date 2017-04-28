@@ -1,0 +1,15 @@
+	public <T> void ${entity}s(RequestContext ctx) {
+		try {
+			${Entity}SearchBean search = toBean(${Entity}SearchBean.class);
+			List<${Entity}> list = ServiceFactory.getI${Entity}Service().findBySearch(0, search);
+			if (list == null || list.isEmpty()) {
+				ctx.write("查无数据，不能导出Excel！");
+				return;
+			}
+			super.excelExport("用户列表", ${Entity}Bean.entities2Beans(list));
+		} catch (Exception e) {
+			logE(".excelExport()", e);
+			ctx.write("Excel导出错误！");
+		}
+	}
+

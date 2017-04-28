@@ -1,0 +1,3 @@
+import ${entityPackage}.${Entity};
+import ${exportBeanPackage}.${Entity}Bean;
+import ${searchBeanPackage}.${Entity}SearchBean;

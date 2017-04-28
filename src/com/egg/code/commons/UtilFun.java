@@ -36,6 +36,16 @@ public class UtilFun {
         return !isBlank(obj);
     }
 
+    public boolean endsWith(Object obj, String end) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof CharSequence)) {
+            return false;
+        }
+        return ((CharSequence) obj).toString().endsWith(end);
+    }
+
     public String escape(String obj) {
         if (obj == null) {
             return "";

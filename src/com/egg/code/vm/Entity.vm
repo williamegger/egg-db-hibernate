@@ -24,6 +24,8 @@ public class ${Entity} implements java.io.Serializable {
 		obj.set${field.Name}(false);
 #elseif(${field.type} == "Boolean" && $!{field.columnInfo.def}=="1")
 		obj.set${field.Name}(true);
+#elseif(${field.type} == "Long")
+		obj.set${field.Name}($!{field.columnInfo.def}L);
 #else
 		obj.set${field.Name}($!{field.columnInfo.def});
 #end
@@ -41,10 +43,19 @@ public class ${Entity} implements java.io.Serializable {
 		this.${field.name} = ${field.name};
 	}
 
-#if(${field.Name.endsWith("Date")} && (${field.type} == "Long" || ${field.type} == "long"))
+#if(${field.Name.endsWith("Date")})
+#if(${field.type} == "Long" || ${field.type} == "long")
+    public String get${field.Name}Str() {
+	    return DateTimeUtil.formatDateTime(${field.name});
+    }
+#elseif(${field.type} == "java.sql.Timestamp")
 	public String get${field.Name}Str() {
-		return DateTimeUtil.formatDateTime(${field.name});
+		if (${field.name} == null) {
+			return "";
+		}
+		return DateTimeUtil.formatDateTime(${field.name}.getTime());
 	}
+#end
 #end
 
 #end

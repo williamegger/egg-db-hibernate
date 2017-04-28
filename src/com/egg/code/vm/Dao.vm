@@ -414,8 +414,18 @@ public class ${Entity}Dao implements I${Entity}Dao {
 				query.le("s1.createDate", search.getEndTime());
 			}
 #end
+			boolean asc = (search.getOrderAsc() == 1);
+			switch (search.getOrderColunm()) {
+				case ${Entity}SearchBean.order_${id}:
+					query.order("s1.${id}", asc);
+					break;
+				default:
+					query.order("s1.${id}", asc);
+					break;
+			}
+		} else {
+			query.order("s1.${id}", false);
 		}
-		query.order("s1.${id}", false);
 		return query;
 	}
 

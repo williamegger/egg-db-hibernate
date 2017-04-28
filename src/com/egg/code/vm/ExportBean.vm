@@ -1,0 +1,120 @@
+package ${exportBeanPackage};
+
+import ${ExcelExportPackage}.ExcelAnnotation;
+import ${entityPackage}.${Entity};
+#foreach($f in ${fieldList})
+#if(${f.isRef})
+import ${entityPackage}.${f.Type};
+#end
+#end
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ${Entity}Bean implements Serializable {
+
+    @ExcelAnnotation(exportName = "ID")
+    private ${idType} ${id};
+#foreach($f in ${fieldList})
+    #set($var = ${f.Type})
+#if(${f.Type}=="String")
+    #set($var = "String")
+#elseif(${f.Type}=="Integer")
+    #set($var = "int")
+#elseif(${f.Type}=="Double")
+    #set($var = "double")
+#elseif(${f.Type}=="Boolean")
+    #set($var = "String")
+#elseif($util.endsWith(${f.name}, "Date") || ${f.Type} == "Timestamp")
+    #set($var = "String")
+#elseif(${f.Type}=="Long")
+    #set($var = "long")
+#end
+    @ExcelAnnotation(exportName = "${f.name}")
+    private $var ${f.name};
+#end
+
+    public static ${Entity}Bean entity2Bean(${Entity} ${entity}) {
+        if (${entity} == null) {
+            return null;
+        }
+
+        ${Entity}Bean bean = new ${Entity}Bean();
+        bean.set${Id}(${entity}.get${Id}());
+#foreach($f in ${fieldList})
+#if(${f.Type}=="String")
+        bean.set${f.Name}(${entity}.get${f.Name}());
+#elseif(${f.Type}=="Integer")
+        if (${entity}.get${f.Name}() != null) {
+            bean.set${f.Name}(${entity}.get${f.Name}());
+        }
+#elseif(${f.Type}=="Double")
+        if (${entity}.get${f.Name}() != null) {
+            bean.set${f.Name}(${entity}.get${f.Name}());
+        }
+#elseif(${f.Type}=="Boolean")
+        bean.set${f.Name}((${entity}.get${f.Name}() != null && ${entity}.get${f.Name}()) ? "Y" : "N");
+#elseif($util.endsWith(${f.name}, "Date") || ${f.Type} == "Timestamp")
+        bean.set${f.Name}(${entity}.get${f.Name}Str());
+#elseif(${f.Type}=="Long")
+        if (${entity}.get${f.Name}() != null) {
+            bean.set${f.Name}(${entity}.get${f.Name}());
+        }
+#else
+        bean.set${f.Name}(${entity}.get${f.Name}());
+#end
+#end
+        return bean;
+    }
+
+    public static List<${Entity}Bean> entities2Beans(List<${Entity}> list) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+
+        List<${Entity}Bean> beans = new ArrayList<${Entity}Bean>();
+        ${Entity}Bean bean;
+        for (int i = 0, len = list.size(); i < len; i++) {
+            bean = entity2Bean(list.get(i));
+            if (bean == null) {
+                continue;
+            }
+            beans.add(bean);
+        }
+        return beans;
+    }
+
+	public ${Entity}Bean() {
+	}
+
+    private ${idType} get${Id}() {
+        return ${id};
+    }
+    private void set${Id}(${idType} ${id}) {
+        this.${id} = ${id};
+    }
+#foreach($f in ${fieldList})
+    #set($var = ${f.Type})
+#if(${f.Type}=="String")
+    #set($var = "String")
+#elseif(${f.Type}=="Integer")
+    #set($var = "int")
+#elseif(${f.Type}=="Double")
+    #set($var = "double")
+#elseif(${f.Type}=="Boolean")
+    #set($var = "String")
+#elseif($util.endsWith(${f.name}, "Date") || ${f.Type} == "Timestamp")
+    #set($var = "String")
+#elseif(${f.Type}=="Long")
+    #set($var = "long")
+#end
+    private $var get${f.Name}() {
+        return ${f.name};
+    }
+    private void set${f.Name}($var ${f.name}) {
+        this.${f.name} = ${f.name};
+    }
+#end
+
+}

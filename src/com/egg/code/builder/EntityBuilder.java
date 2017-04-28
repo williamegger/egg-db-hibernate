@@ -11,12 +11,12 @@ public class EntityBuilder {
 
     public static void main(String[] args) {
         // 根据项目修改
-        final String database = "mj_xuezhan";
+        final String database = "mj_anhui";
         final String packageName = "com.prj.server.model.entity";
 
         String fileDir = "D:/_build/code/" + packageName.replaceAll("[.]", "/");
         build(new String[]{
-                "sys_conf"
+                "card_room_base_info"
         }, database, packageName, fileDir);
 
         System.out.println("OVER");
@@ -122,7 +122,13 @@ public class EntityBuilder {
             field.put("isRef", false);
             field.put("name", Common.strToCamel((String) column.get("name")));
             field.put("Name", Common.firstUpper((String) field.get("name")));
-            field.put("type", getJavaWrapType((String) column.get("type"), (Integer) column.get("precision")));
+            String javaType = getJavaWrapType((String) column.get("type"), (Integer) column.get("precision"));
+            field.put("type", javaType);
+            if (javaType.startsWith("java")) {
+                field.put("fullType", javaType);
+            } else {
+                field.put("fullType", "java.lang." + javaType);
+            }
         }
         return field;
     }

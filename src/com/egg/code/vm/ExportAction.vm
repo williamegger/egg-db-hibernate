@@ -1,0 +1,12 @@
+package ${ExportActionPackage};
+
+import com.egg.action.core.ActionAnno;
+import com.egg.action.core.RequestContext;
+import ${rootPackage}.model.service.ServiceFactory;
+import ${rootPackage}.view.base.BaseAction;
+
+import java.util.List;
+
+@ActionAnno.Action(value = "${ExportActionUrl}")
+public class ${ExportActionName} extends BaseAction {
+}
