@@ -217,7 +217,7 @@ public class CodeBuilder {
                 if (prjFile.exists()) {
                     FileUtil.copyFile(new File(prjFilePath), codeFile);
                 } else {
-                    VelocityUtil.buildFile(Tlp.PATH, "ExportAction.vm", ExportActionFile, new HashMap<String, Object>());
+                    VelocityUtil.buildFile(Tlp.PATH, "ExportAction.vm", ExportActionFile, mapList.get(0));
                 }
             }
             final String txt = FileUtil.readText(codeFile);
