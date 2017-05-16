@@ -11,7 +11,7 @@ public class ${Entity}SearchBean {
 
 	private String q${Id};
 #foreach($f in ${fieldList})
-#if(${f.isRef} || ${f.Type}=="Long" || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createDate" || ${f.name}=="createMan" || ${f.name}=="lastDate" || ${f.name}=="lastMan")
+#if(${f.isRef} || (${f.Type}=="Long" && ${field.Name.endsWith("Date")}) || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createDate" || ${f.name}=="createMan" || ${f.name}=="lastDate" || ${f.name}=="lastMan")
 #elseif(${f.Type}=="Boolean" || ${f.Type}=="Integer")
 	private int q${f.Name} = -1;
 #elseif(${f.Type}=="String")
@@ -37,7 +37,7 @@ public class ${Entity}SearchBean {
 		this.q${Id} = q${Id};
 	}
 #foreach($f in ${fieldList})
-#if(${f.isRef} || ${f.Type}=="Long" || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createDate" || ${f.name}=="createMan" || ${f.name}=="lastDate" || ${f.name}=="lastMan")
+#if(${f.isRef} || (${f.Type}=="Long" && ${field.Name.endsWith("Date")}) || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createDate" || ${f.name}=="createMan" || ${f.name}=="lastDate" || ${f.name}=="lastMan")
 #elseif(${f.Type}=="Boolean" || ${f.Type}=="Integer")
 	public int getq${f.Name}() {
 		return q${f.Name};

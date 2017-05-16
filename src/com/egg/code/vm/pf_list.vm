@@ -32,7 +32,7 @@
 #end
 						<td><a class="btn btn_green" onclick="lazySearch()">搜索</a></td>
 						<td><a class="btn btn_blue" href="add.jsf">添加</a></td>
-                        <td><a class="btn btn_green" data-href="#{base}${ExportActionUrl}/${entity}s}" onclick="excelExport(this)">导出</a></td>
+                        <td><a class="btn btn_green" data-href="#{base}${ExportActionUrl}/${entity}s" onclick="excelExport(this)">导出</a></td>
 					</tr>
 				</table>
 			</div>
@@ -49,7 +49,7 @@
 	      					<tr>
 								<td class="allowSort" data-orderColunm="0">ID</td>
 #foreach($f in ${fieldList})
-#if(${f.Type}=="Long" || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createMan" || ${f.name}=="lastMan")
+#if((${f.Type}=="Long" && ${field.Name.endsWith("Date")}) || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createMan" || ${f.name}=="lastMan")
 #else
 								<td>${f.name}</td>
 #end
@@ -62,7 +62,7 @@
 	      					<tr class="#{vs.odd?'tr_odd':'tr_even'}">
 	      						<td><h:outputText value="#{v.${id}}" /></td>
 #foreach($f in ${fieldList})
-#if(${f.Type}=="Long" || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createMan" || ${f.name}=="lastMan")
+#if((${f.Type}=="Long" && ${field.Name.endsWith("Date")}) || ${f.name}=="remark" || ${f.name}=="deleted" || ${f.name}=="createMan" || ${f.name}=="lastMan")
 #elseif(${f.Type}=="Boolean")
 								<td>
 									<h:outputText styleClass="cgreen" value="Y" rendered="#{v.${f.name}}" />
