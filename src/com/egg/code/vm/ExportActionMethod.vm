@@ -8,7 +8,7 @@
 			}
 			super.excelExport("用户列表", ${Entity}Bean.entities2Beans(list));
 		} catch (Exception e) {
-			logE(".excelExport()", e);
+			logE(".${entity}s()", e);
 			ctx.write("Excel导出错误！");
 		}
 	}
